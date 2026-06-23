@@ -5,6 +5,7 @@ import {
   buildingEntries,
   chapterLinks,
   chapterMetrics,
+  experienceJourney,
   journalProfile,
   selectedProjects,
   thinkingEntries,
@@ -162,12 +163,47 @@ function App() {
           id="experience"
           number="02"
           title="Experience"
-          lead="Career progression will be presented as a continuous engineering story: product ownership, enterprise process rigor, and distributed systems depth."
+          lead="A progression from product ownership to enterprise workflow rigor to distributed systems work, presented as one continuous engineering path."
         >
-          <p>
-            The next phase will convert the work history into an editorial timeline starting at WetAcre, moving through Forsys,
-            and arriving at Trinitum — showing how scope, system complexity, and technical responsibility expanded over time.
-          </p>
+          <div className="grid gap-10 xl:grid-cols-[1.05fr_0.95fr]">
+            <div>
+              <div className="timeline">
+                {experienceJourney.map((entry) => (
+                  <article key={entry.company} className="timeline-entry">
+                    <p className="timeline-period">{entry.period}</p>
+                    <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-2">
+                      <h3 className="font-[var(--journal-serif)] text-3xl text-[var(--journal-ink)]">{entry.company}</h3>
+                      <p className="text-sm uppercase tracking-[0.2em] text-[rgba(102,54,53,0.58)]">{entry.role}</p>
+                    </div>
+                    <p className="mt-2 text-sm text-[rgba(102,54,53,0.62)]">{entry.location}</p>
+                    <p className="mt-5">{entry.summary}</p>
+                    <ul className="technical-list mt-5">
+                      {entry.focus.map((point) => (
+                        <li key={point}>
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              {experienceJourney.map((entry) => (
+                <section key={entry.company} className="paper-panel p-6">
+                  <p className="chapter-kicker">Systems touched · {entry.company}</p>
+                  <div className="tag-row mt-5">
+                    {entry.systems.map((system) => (
+                      <span key={system} className="tag-chip">
+                        {system}
+                      </span>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          </div>
         </ChapterPreview>
 
         <div className="journal-shell py-3">
