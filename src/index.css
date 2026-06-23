@@ -368,6 +368,16 @@
     gap: 0.55rem;
   }
 
+  .stack-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+
+  .stack-list li {
+    list-style: none;
+  }
+
   .tag-chip {
     border: 1px solid var(--journal-border);
     border-radius: 999px;
@@ -453,6 +463,7 @@
   }
 
   .terminal-result {
+    margin-top: 0.18rem;
     white-space: pre-wrap;
     color: rgba(255, 230, 226, 0.88);
   }

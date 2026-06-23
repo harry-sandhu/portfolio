@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type FormEvent, type MouseEvent, type ReactNode } from 'react';
 import {
   aboutNarrative,
   aboutPillars,
@@ -83,6 +83,7 @@ function resolveDevCommand(rawCommand: string): CommandResolution {
         'help',
         'about',
         'projects',
+        'project list',
         'project <name>',
         'architecture <name>',
         'experience',
@@ -111,7 +112,14 @@ function resolveDevCommand(rawCommand: string): CommandResolution {
     };
   }
 
-  if (normalized === 'projects') {
+  if (
+    normalized === 'projects' ||
+    normalized === 'project list' ||
+    normalized === 'projects list' ||
+    normalized === 'list projects' ||
+    normalized === 'ls' ||
+    normalized === 'ls projects'
+  ) {
     return {
       type: 'append',
       result: selectedProjects
@@ -217,6 +225,7 @@ function App() {
   const [terminalEntries, setTerminalEntries] = useState<TerminalEntry[]>(() => createInitialTerminalEntries());
   const [terminalCommand, setTerminalCommand] = useState('');
   const terminalInputRef = useRef<HTMLInputElement>(null);
+  const terminalBodyRef = useRef<HTMLDivElement>(null);
   const cvUrl = `${import.meta.env.BASE_URL}Harcharan-Singh-CV.md`;
 
   useEffect(() => {
@@ -230,7 +239,7 @@ function App() {
           }
         });
       },
-      { threshold: 0.18, rootMargin: '0px 0px -40px 0px' },
+      { threshold: 0.01, rootMargin: '0px 0px -10% 0px' },
     );
 
     sections.forEach((section) => observer.observe(section));
@@ -265,6 +274,13 @@ function App() {
     };
   }, [mode]);
 
+  useEffect(() => {
+    if (mode !== 'dev') return;
+    const terminalBody = terminalBodyRef.current;
+    if (!terminalBody) return;
+    terminalBody.scrollTop = terminalBody.scrollHeight;
+  }, [mode, terminalEntries]);
+
   function executeCommand(rawCommand: string) {
     const trimmed = rawCommand.trim();
     if (!trimmed) return;
@@ -297,6 +313,12 @@ function App() {
   function handleTerminalSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     executeCommand(terminalCommand);
+  }
+
+  function handleOverlayClick(event: MouseEvent<HTMLDivElement>) {
+    if (event.target === event.currentTarget) {
+      setMode('ui');
+    }
   }
 
   return (
@@ -632,13 +654,13 @@ function App() {
 
               <section className="paper-panel p-6">
                 <p className="detail-label">Current working set</p>
-                <div className="tag-row mt-4">
+                <ul className="stack-list mt-4" aria-label="Current working set">
                   {stackFootprint.map((item) => (
-                    <span key={item} className="tag-chip">
+                    <li key={item} className="tag-chip">
                       {item}
-                    </span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </section>
             </div>
 
@@ -683,7 +705,7 @@ function App() {
       </footer>
 
       {mode === 'dev' ? (
-        <div className="terminal-overlay" role="dialog" aria-modal="true" aria-label="Dev mode terminal">
+        <div className="terminal-overlay" role="dialog" aria-modal="true" aria-label="Dev mode terminal" onClick={handleOverlayClick}>
           <div className="terminal-window">
             <div className="terminal-chrome">
               <span>Harcharan Singh · Dev Mode</span>
@@ -692,7 +714,7 @@ function App() {
               </button>
             </div>
 
-            <div className="terminal-body">
+            <div ref={terminalBodyRef} className="terminal-body">
               {terminalEntries.map((entry) => (
                 <div key={entry.id} className="terminal-entry">
                   <p className="terminal-prompt">hs@portfolio:~$ {entry.prompt}</p>
