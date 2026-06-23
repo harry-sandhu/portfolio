@@ -214,14 +214,86 @@ function App() {
           id="selected-projects"
           number="03"
           title="Selected Projects"
-          lead="The project chapter is being shaped as a sequence of case studies rather than a gallery of screenshots or cards."
+          lead="A set of case studies centered on system design, architecture judgment, and the operational realities behind the finished product."
         >
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          <div>
             {selectedProjects.map((project) => (
-              <article key={project.name} className="paper-panel p-5">
-                <p className="chapter-kicker">{project.label}</p>
-                <h3 className="mt-3 font-[var(--journal-serif)] text-2xl text-[var(--journal-ink)]">{project.name}</h3>
-                <p className="mt-3 text-[rgba(102,54,53,0.76)]">{project.summary}</p>
+              <article key={project.name} className="project-case first:border-t-0 first:pt-0">
+                <div className="project-meta">
+                  <p className="chapter-kicker">{project.year}</p>
+                  <p className="text-sm uppercase tracking-[0.22em] text-[rgba(102,54,53,0.6)]">{project.label}</p>
+                  <h3 className="project-name">{project.name}</h3>
+                </div>
+
+                <div className="space-y-8">
+                  <p className="text-lg leading-8 text-[rgba(102,54,53,0.84)]">{project.summary}</p>
+
+                  <div className="project-grid">
+                    <div className="space-y-7">
+                      <section>
+                        <p className="detail-label">Problem</p>
+                        <p className="mt-3">{project.problem}</p>
+                      </section>
+
+                      <section>
+                        <p className="detail-label">Architecture</p>
+                        <ul className="technical-list mt-4">
+                          {project.architecture.map((item) => (
+                            <li key={item}>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </section>
+                    </div>
+
+                    <aside className="paper-panel paper-panel-strong p-6">
+                      <p className="detail-label">Architecture sketch</p>
+                      <div className="project-diagram mt-5">
+                        {project.diagram.map((node) => (
+                          <div key={node} className="project-node">
+                            {node}
+                          </div>
+                        ))}
+                      </div>
+                    </aside>
+                  </div>
+
+                  <div className="project-detail-grid">
+                    <section className="paper-panel p-5">
+                      <p className="detail-label">Technologies</p>
+                      <div className="tag-row mt-4">
+                        {project.technologies.map((technology) => (
+                          <span key={technology} className="tag-chip">
+                            {technology}
+                          </span>
+                        ))}
+                      </div>
+                    </section>
+
+                    <section className="paper-panel p-5">
+                      <p className="detail-label">Key challenges</p>
+                      <ul className="technical-list mt-4">
+                        {project.challenges.map((challenge) => (
+                          <li key={challenge}>
+                            <span>{challenge}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+
+                    <section className="paper-panel p-5 xl:col-span-2">
+                      <p className="detail-label">Outcomes</p>
+                      <ul className="technical-list mt-4">
+                        {project.outcomes.map((outcome) => (
+                          <li key={outcome}>
+                            <span>{outcome}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  </div>
+                </div>
               </article>
             ))}
           </div>
