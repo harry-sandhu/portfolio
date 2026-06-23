@@ -1,11 +1,63 @@
-import { useState } from 'react';
-import { chapterLinks, journalProfile } from './data/journal';
+import { useEffect, useState } from 'react';
+import {
+  aboutNarrative,
+  aboutPillars,
+  buildingEntries,
+  chapterLinks,
+  chapterMetrics,
+  journalProfile,
+  selectedProjects,
+  thinkingEntries,
+} from './data/journal';
 
 type InterfaceMode = 'ui' | 'dev';
+
+type ChapterPreviewProps = {
+  id: string;
+  number: string;
+  title: string;
+  lead: string;
+  children: React.ReactNode;
+};
+
+function ChapterPreview({ id, number, title, lead, children }: ChapterPreviewProps) {
+  return (
+    <section id={id} data-reveal className="journal-shell journal-chapter reveal-section">
+      <div>
+        <p className="chapter-kicker">Chapter {number}</p>
+      </div>
+
+      <div>
+        <h2 className="chapter-heading">{title}</h2>
+        <p className="chapter-lead mt-5">{lead}</p>
+        <div className="mt-8 journal-body">{children}</div>
+      </div>
+    </section>
+  );
+}
 
 function App() {
   const [mode, setMode] = useState<InterfaceMode>('ui');
   const cvUrl = `${import.meta.env.BASE_URL}Harcharan-Singh-CV.md`;
+
+  useEffect(() => {
+    const sections = document.querySelectorAll<HTMLElement>('[data-reveal]');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.18, rootMargin: '0px 0px -40px 0px' },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="journal-app">
@@ -60,44 +112,143 @@ function App() {
           </div>
         </section>
 
-        <section className="journal-shell pb-20">
+        <div className="journal-shell pb-6">
           <div className="journal-rule" />
-          <div className="grid gap-8 py-12 lg:grid-cols-[220px_minmax(0,1fr)]">
-            <div>
-              <p className="chapter-kicker">Notebook Index</p>
+        </div>
+
+        <ChapterPreview
+          id="who-i-am"
+          number="01"
+          title="Who I Am"
+          lead="An engineer focused on systems that need to be understandable, dependable, and ready for real operating conditions."
+        >
+          <div className="grid gap-10 xl:grid-cols-[1.05fr_0.95fr]">
+            <div className="space-y-5">
+              {aboutNarrative.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
             </div>
 
             <div className="space-y-6">
-              <p className="chapter-lead max-w-4xl">
-                The portfolio is being restructured as an editorial walkthrough — less landing page, more technical journal.
-                This shell now establishes the interface, tone, and centered opening view.
-              </p>
+              <section className="paper-panel p-6">
+                <p className="chapter-kicker">Focus Areas</p>
+                <div className="mt-5 grid gap-5 sm:grid-cols-2">
+                  {aboutPillars.map((pillar) => (
+                    <article key={pillar.title}>
+                      <h3 className="font-[var(--journal-serif)] text-2xl text-[var(--journal-ink)]">{pillar.title}</h3>
+                      <p className="mt-3 text-[rgba(102,54,53,0.76)]">{pillar.body}</p>
+                    </article>
+                  ))}
+                </div>
+              </section>
 
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {chapterLinks.map((chapter) => (
-                  <article key={chapter.id} className="paper-panel p-5">
-                    <p className="chapter-kicker">{chapter.number}</p>
-                    <h2 className="mt-3 font-[var(--journal-serif)] text-2xl text-[var(--journal-ink)]">{chapter.title}</h2>
+              <section className="chapter-metrics">
+                {chapterMetrics.map((metric) => (
+                  <article key={metric.label}>
+                    <p className="metric-value">{metric.value}</p>
+                    <p className="metric-label">{metric.label}</p>
                   </article>
                 ))}
-              </div>
-
-              {mode === 'dev' ? (
-                <div className="paper-panel p-5 text-sm text-[rgba(102,54,53,0.78)]">
-                  Dev Mode is reserved for the terminal overlay and query system, which will be introduced after the core
-                  narrative chapters are built.
-                </div>
-              ) : null}
+              </section>
             </div>
           </div>
-        </section>
+        </ChapterPreview>
+
+        <div className="journal-shell py-3">
+          <div className="journal-rule" />
+        </div>
+
+        <ChapterPreview
+          id="experience"
+          number="02"
+          title="Experience"
+          lead="Career progression will be presented as a continuous engineering story: product ownership, enterprise process rigor, and distributed systems depth."
+        >
+          <p>
+            The next phase will convert the work history into an editorial timeline starting at WetAcre, moving through Forsys,
+            and arriving at Trinitum — showing how scope, system complexity, and technical responsibility expanded over time.
+          </p>
+        </ChapterPreview>
+
+        <div className="journal-shell py-3">
+          <div className="journal-rule" />
+        </div>
+
+        <ChapterPreview
+          id="selected-projects"
+          number="03"
+          title="Selected Projects"
+          lead="The project chapter is being shaped as a sequence of case studies rather than a gallery of screenshots or cards."
+        >
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {selectedProjects.map((project) => (
+              <article key={project.name} className="paper-panel p-5">
+                <p className="chapter-kicker">{project.label}</p>
+                <h3 className="mt-3 font-[var(--journal-serif)] text-2xl text-[var(--journal-ink)]">{project.name}</h3>
+                <p className="mt-3 text-[rgba(102,54,53,0.76)]">{project.summary}</p>
+              </article>
+            ))}
+          </div>
+        </ChapterPreview>
+
+        <div className="journal-shell py-3">
+          <div className="journal-rule" />
+        </div>
+
+        <ChapterPreview
+          id="building"
+          number="04"
+          title="Hackathons & Building"
+          lead="This chapter will highlight execution under pressure — not trophies, but repeated proof of shipping complex systems quickly."
+        >
+          <ul className="technical-list">
+            {buildingEntries.map((entry) => (
+              <li key={entry.title}>
+                <div>
+                  <p className="font-[var(--journal-serif)] text-2xl text-[var(--journal-ink)]">
+                    {entry.title} · {entry.event}
+                  </p>
+                  <p className="mt-2 text-[rgba(102,54,53,0.76)]">{entry.angle}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </ChapterPreview>
+
+        <div className="journal-shell py-3">
+          <div className="journal-rule" />
+        </div>
+
+        <ChapterPreview
+          id="thinking"
+          number="05"
+          title="Thinking"
+          lead="A space for engineering principles, architecture notes, operational reflections, and the ideas behind the systems."
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
+            {thinkingEntries.map((entry) => (
+              <article key={entry.title} className="paper-panel p-5">
+                <p className="chapter-kicker">{entry.kind}</p>
+                <h3 className="mt-3 font-[var(--journal-serif)] text-2xl text-[var(--journal-ink)]">{entry.title}</h3>
+                <p className="mt-3 text-[rgba(102,54,53,0.76)]">{entry.excerpt}</p>
+              </article>
+            ))}
+          </div>
+
+          {mode === 'dev' ? (
+            <div className="paper-panel mt-8 p-5 text-sm text-[rgba(102,54,53,0.78)]">
+              Dev Mode is reserved for the terminal overlay and query system, which will be introduced after the core
+              narrative chapters are fully built.
+            </div>
+          ) : null}
+        </ChapterPreview>
       </main>
 
       <footer className="journal-shell flex flex-col gap-3 border-t border-[rgba(222,179,173,0.75)] py-8 text-sm text-[rgba(102,54,53,0.7)] sm:flex-row sm:items-center sm:justify-between">
         <p>
           {journalProfile.location} · <a href={`mailto:${journalProfile.email}`}>{journalProfile.email}</a>
         </p>
-        <p>Phase 3 establishes the shell, hero, and persistent mode switch.</p>
+        <p>Phase 4 establishes the chapter-based scroll structure and story rhythm.</p>
       </footer>
     </div>
   );
