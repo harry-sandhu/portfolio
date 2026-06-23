@@ -8,6 +8,7 @@ import {
   experienceJourney,
   journalProfile,
   selectedProjects,
+  stackFootprint,
   thinkingEntries,
 } from './data/journal';
 
@@ -364,16 +365,40 @@ function App() {
           id="thinking"
           number="05"
           title="Thinking"
-          lead="A space for engineering principles, architecture notes, operational reflections, and the ideas behind the systems."
+          lead="Ideas, engineering principles, architecture notes, and the quieter observations that shape how systems are built."
         >
-          <div className="grid gap-4 sm:grid-cols-2">
-            {thinkingEntries.map((entry) => (
-              <article key={entry.title} className="paper-panel p-5">
-                <p className="chapter-kicker">{entry.kind}</p>
-                <h3 className="mt-3 font-[var(--journal-serif)] text-2xl text-[var(--journal-ink)]">{entry.title}</h3>
-                <p className="mt-3 text-[rgba(102,54,53,0.76)]">{entry.excerpt}</p>
-              </article>
-            ))}
+          <div className="grid gap-10 xl:grid-cols-[0.9fr_1.1fr]">
+            <div className="space-y-5">
+              <p>
+                This chapter is meant to feel less like a blog feed and more like margin notes from ongoing engineering work:
+                small principles, operating assumptions, and reminders about what actually matters once software meets reality.
+              </p>
+              <p>
+                The writing here should grow over time — around system design, AI infrastructure, developer experience,
+                operational clarity, and how engineering decisions influence product trust.
+              </p>
+
+              <section className="paper-panel p-6">
+                <p className="detail-label">Current working set</p>
+                <div className="tag-row mt-4">
+                  {stackFootprint.map((item) => (
+                    <span key={item} className="tag-chip">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </section>
+            </div>
+
+            <div className="thinking-grid">
+              {thinkingEntries.map((entry) => (
+                <article key={entry.title} className="note-card">
+                  <p className="note-kind">{entry.kind}</p>
+                  <h3 className="mt-3 font-[var(--journal-serif)] text-2xl text-[var(--journal-ink)]">{entry.title}</h3>
+                  <p className="mt-3 text-[rgba(102,54,53,0.76)]">{entry.excerpt}</p>
+                </article>
+              ))}
+            </div>
           </div>
 
           {mode === 'dev' ? (
@@ -385,11 +410,31 @@ function App() {
         </ChapterPreview>
       </main>
 
-      <footer className="journal-shell flex flex-col gap-3 border-t border-[rgba(222,179,173,0.75)] py-8 text-sm text-[rgba(102,54,53,0.7)] sm:flex-row sm:items-center sm:justify-between">
-        <p>
-          {journalProfile.location} · <a href={`mailto:${journalProfile.email}`}>{journalProfile.email}</a>
-        </p>
-        <p>Phase 4 establishes the chapter-based scroll structure and story rhythm.</p>
+      <footer className="journal-shell border-t border-[rgba(222,179,173,0.75)] py-10 text-sm text-[rgba(102,54,53,0.72)]">
+        <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
+          <div>
+            <p className="chapter-kicker">Colophon</p>
+            <p className="mt-3 max-w-2xl text-base leading-8 text-[rgba(102,54,53,0.78)]">
+              Built as a calm technical document — focused on systems, product judgment, and the engineering story behind the
+              work.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2 text-left md:text-right">
+            <a href={`mailto:${journalProfile.email}`} className="journal-nav-link">
+              {journalProfile.email}
+            </a>
+            <a href={journalProfile.github} target="_blank" rel="noreferrer" className="journal-nav-link">
+              GitHub
+            </a>
+            <a href={journalProfile.linkedin} target="_blank" rel="noreferrer" className="journal-nav-link">
+              LinkedIn
+            </a>
+            <a href={cvUrl} download className="journal-nav-link">
+              Download CV
+            </a>
+          </div>
+        </div>
       </footer>
     </div>
   );
