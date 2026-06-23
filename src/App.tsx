@@ -307,20 +307,53 @@ function App() {
           id="building"
           number="04"
           title="Hackathons & Building"
-          lead="This chapter will highlight execution under pressure — not trophies, but repeated proof of shipping complex systems quickly."
+          lead="Evidence of execution under constraint: defining systems quickly, owning technical scope, and still shipping something coherent."
         >
-          <ul className="technical-list">
-            {buildingEntries.map((entry) => (
-              <li key={entry.title}>
-                <div>
-                  <p className="font-[var(--journal-serif)] text-2xl text-[var(--journal-ink)]">
-                    {entry.title} · {entry.event}
-                  </p>
-                  <p className="mt-2 text-[rgba(102,54,53,0.76)]">{entry.angle}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <div className="grid gap-10 xl:grid-cols-[0.85fr_1.15fr]">
+            <div className="space-y-5">
+              <p>
+                These environments are useful because they compress decision-making. They make it obvious whether an engineer
+                can define a system, pick the right constraints, divide work, and still deliver in time.
+              </p>
+              <p>
+                The value here is not the headline. It is the repeatability: multiple builds, different technical contexts, and
+                consistent evidence of speed, ownership, and architectural clarity.
+              </p>
+
+              <section className="paper-panel p-6">
+                <p className="detail-label">What this chapter signals</p>
+                <ul className="technical-list mt-4">
+                  <li>
+                    <span>Ability to scope complex ideas into deliverable systems fast.</span>
+                  </li>
+                  <li>
+                    <span>Comfort taking technical ownership when requirements are still moving.</span>
+                  </li>
+                  <li>
+                    <span>Proof that speed does not need to come at the cost of system thinking.</span>
+                  </li>
+                </ul>
+              </section>
+            </div>
+
+            <div className="building-grid">
+              {buildingEntries.map((entry) => (
+                <article key={entry.title} className="paper-panel p-6">
+                  <p className="detail-label">{entry.event}</p>
+                  <h3 className="mt-3 font-[var(--journal-serif)] text-3xl text-[var(--journal-ink)]">{entry.title}</h3>
+                  <p className="mt-2 text-sm uppercase tracking-[0.18em] text-[rgba(102,54,53,0.58)]">{entry.window}</p>
+                  <p className="mt-5 text-[rgba(102,54,53,0.82)]">{entry.angle}</p>
+                  <ul className="technical-list mt-5">
+                    {entry.evidence.map((item) => (
+                      <li key={item}>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </div>
         </ChapterPreview>
 
         <div className="journal-shell py-3">
