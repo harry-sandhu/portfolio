@@ -349,6 +349,20 @@ function App() {
             <h1 className="hero-name mt-8">{journalProfile.name}</h1>
             <p className="hero-role mt-8">{journalProfile.role}</p>
             <p className="hero-support mx-auto mt-8">{journalProfile.supportLine}</p>
+
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-[0.74rem] uppercase tracking-[0.22em] text-[rgba(102,54,53,0.58)]">
+              <span>{journalProfile.location}</span>
+              <span>Backend / Systems</span>
+              <span>Five chapters</span>
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-2 md:hidden">
+              {chapterLinks.map((chapter) => (
+                <a key={chapter.id} href={`#${chapter.id}`} className="tag-chip">
+                  {chapter.number} · {chapter.title}
+                </a>
+              ))}
+            </div>
           </div>
         </section>
 
