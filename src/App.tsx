@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import {
   aboutNarrative,
   aboutPillars,
   buildingEntries,
   chapterLinks,
   chapterMetrics,
+  devModeSamples,
   experienceJourney,
   journalProfile,
   selectedProjects,
@@ -19,8 +20,19 @@ type ChapterPreviewProps = {
   number: string;
   title: string;
   lead: string;
-  children: React.ReactNode;
+  children: ReactNode;
 };
+
+type TerminalEntry = {
+  id: number;
+  prompt: string;
+  result: string;
+};
+
+type CommandResolution =
+  | { type: 'append'; result: string }
+  | { type: 'clear' }
+  | { type: 'ui' };
 
 function ChapterPreview({ id, number, title, lead, children }: ChapterPreviewProps) {
   return (
@@ -38,8 +50,173 @@ function ChapterPreview({ id, number, title, lead, children }: ChapterPreviewPro
   );
 }
 
+function formatList(items: string[]) {
+  return items.map((item) => `- ${item}`).join('\n');
+}
+
+function createInitialTerminalEntries(): TerminalEntry[] {
+  return [
+    {
+      id: Date.now(),
+      prompt: 'init',
+      result: [
+        'Dev Mode indexes the portfolio like a systems console.',
+        'Ask about projects, experience, architecture, stack, thinking, building, or contact.',
+        `Try: ${devModeSamples.join(' · ')}`,
+      ].join('\n'),
+    },
+  ];
+}
+
+function resolveDevCommand(rawCommand: string): CommandResolution {
+  const normalized = rawCommand.trim().toLowerCase();
+
+  if (!normalized) {
+    return { type: 'append', result: 'Enter a command. Try `help` to inspect the portfolio index.' };
+  }
+
+  if (normalized === 'help') {
+    return {
+      type: 'append',
+      result: [
+        'Available commands',
+        'help',
+        'about',
+        'projects',
+        'project <name>',
+        'architecture <name>',
+        'experience',
+        'stack',
+        'thinking',
+        'building',
+        'contact',
+        'clear',
+        'ui',
+      ].join('\n'),
+    };
+  }
+
+  if (normalized === 'clear') {
+    return { type: 'clear' };
+  }
+
+  if (normalized === 'ui' || normalized === 'exit' || normalized === 'close' || normalized === 'mode ui') {
+    return { type: 'ui' };
+  }
+
+  if (normalized === 'about' || normalized === 'whoami') {
+    return {
+      type: 'append',
+      result: [journalProfile.name, journalProfile.role, '', ...aboutNarrative].join('\n'),
+    };
+  }
+
+  if (normalized === 'projects') {
+    return {
+      type: 'append',
+      result: selectedProjects
+        .map((project) => `${project.name} · ${project.label} · ${project.year}\n${project.summary}`)
+        .join('\n\n'),
+    };
+  }
+
+  if (normalized === 'experience' || normalized === 'timeline') {
+    return {
+      type: 'append',
+      result: experienceJourney
+        .map(
+          (entry) =>
+            `${entry.company} — ${entry.role} (${entry.period})\n${entry.summary}\n${formatList(entry.focus)}`,
+        )
+        .join('\n\n'),
+    };
+  }
+
+  if (normalized === 'stack' || normalized === 'skills') {
+    return {
+      type: 'append',
+      result: ['Current working set', formatList(stackFootprint)].join('\n'),
+    };
+  }
+
+  if (normalized === 'thinking' || normalized === 'notes') {
+    return {
+      type: 'append',
+      result: thinkingEntries
+        .map((entry) => `${entry.title} · ${entry.kind}\n${entry.excerpt}`)
+        .join('\n\n'),
+    };
+  }
+
+  if (normalized === 'building' || normalized === 'hackathons') {
+    return {
+      type: 'append',
+      result: buildingEntries
+        .map((entry) => `${entry.title} · ${entry.event}\n${entry.angle}\n${formatList(entry.evidence)}`)
+        .join('\n\n'),
+    };
+  }
+
+  if (normalized === 'contact') {
+    return {
+      type: 'append',
+      result: [
+        journalProfile.name,
+        journalProfile.location,
+        journalProfile.email,
+        journalProfile.github,
+        journalProfile.linkedin,
+      ].join('\n'),
+    };
+  }
+
+  if (normalized.startsWith('project ') || normalized.startsWith('architecture ')) {
+    const query = normalized.replace(/^project\s+/, '').replace(/^architecture\s+/, '').trim();
+    const project = selectedProjects.find((item) => item.name.toLowerCase() === query || item.name.toLowerCase().includes(query));
+
+    if (!project) {
+      return {
+        type: 'append',
+        result: `No project matched \`${query}\`. Try one of: ${selectedProjects.map((item) => item.name).join(', ')}.`,
+      };
+    }
+
+    return {
+      type: 'append',
+      result: [
+        `${project.name} · ${project.label} · ${project.year}`,
+        '',
+        project.summary,
+        '',
+        'Problem',
+        project.problem,
+        '',
+        'Architecture',
+        formatList(project.architecture),
+        '',
+        'Technologies',
+        formatList(project.technologies),
+        '',
+        'Key challenges',
+        formatList(project.challenges),
+        '',
+        'Outcomes',
+        formatList(project.outcomes),
+      ].join('\n'),
+    };
+  }
+
+  return {
+    type: 'append',
+    result: `Unknown command \`${rawCommand}\`. Try \`help\` for the available portfolio queries.`,
+  };
+}
+
 function App() {
   const [mode, setMode] = useState<InterfaceMode>('ui');
+  const [terminalEntries, setTerminalEntries] = useState<TerminalEntry[]>(() => createInitialTerminalEntries());
+  const [terminalCommand, setTerminalCommand] = useState('');
+  const terminalInputRef = useRef<HTMLInputElement>(null);
   const cvUrl = `${import.meta.env.BASE_URL}Harcharan-Singh-CV.md`;
 
   useEffect(() => {
@@ -60,6 +237,67 @@ function App() {
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (mode !== 'dev') {
+      document.body.style.overflow = '';
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      terminalInputRef.current?.focus();
+    }, 80);
+
+    document.body.style.overflow = 'hidden';
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMode('ui');
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.body.style.overflow = '';
+      window.clearTimeout(timeout);
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [mode]);
+
+  function executeCommand(rawCommand: string) {
+    const trimmed = rawCommand.trim();
+    if (!trimmed) return;
+
+    const resolution = resolveDevCommand(trimmed);
+
+    if (resolution.type === 'clear') {
+      setTerminalEntries(createInitialTerminalEntries());
+      setTerminalCommand('');
+      return;
+    }
+
+    if (resolution.type === 'ui') {
+      setTerminalCommand('');
+      setMode('ui');
+      return;
+    }
+
+    setTerminalEntries((current) => [
+      ...current,
+      {
+        id: Date.now() + Math.floor(Math.random() * 1000),
+        prompt: trimmed,
+        result: resolution.result,
+      },
+    ]);
+    setTerminalCommand('');
+  }
+
+  function handleTerminalSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    executeCommand(terminalCommand);
+  }
 
   return (
     <div className="journal-app">
@@ -400,13 +638,6 @@ function App() {
               ))}
             </div>
           </div>
-
-          {mode === 'dev' ? (
-            <div className="paper-panel mt-8 p-5 text-sm text-[rgba(102,54,53,0.78)]">
-              Dev Mode is reserved for the terminal overlay and query system, which will be introduced after the core
-              narrative chapters are fully built.
-            </div>
-          ) : null}
         </ChapterPreview>
       </main>
 
@@ -436,6 +667,53 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {mode === 'dev' ? (
+        <div className="terminal-overlay" role="dialog" aria-modal="true" aria-label="Dev mode terminal">
+          <div className="terminal-window">
+            <div className="terminal-chrome">
+              <span>Harcharan Singh · Dev Mode</span>
+              <button type="button" onClick={() => setMode('ui')} className="journal-nav-link text-left text-[0.72rem] text-white/80">
+                Return to UI
+              </button>
+            </div>
+
+            <div className="terminal-body">
+              {terminalEntries.map((entry) => (
+                <div key={entry.id} className="terminal-entry">
+                  <p className="terminal-prompt">hs@portfolio:~$ {entry.prompt}</p>
+                  <pre className="terminal-result">{entry.result}</pre>
+                </div>
+              ))}
+            </div>
+
+            <form className="terminal-form" onSubmit={handleTerminalSubmit}>
+              <div className="terminal-input-row">
+                <span className="terminal-prompt">$</span>
+                <input
+                  ref={terminalInputRef}
+                  value={terminalCommand}
+                  onChange={(event) => setTerminalCommand(event.target.value)}
+                  className="terminal-input"
+                  placeholder="query projects, architecture, experience, stack..."
+                  aria-label="Dev mode command input"
+                />
+                <button type="submit" className="terminal-submit">
+                  Run
+                </button>
+              </div>
+
+              <div className="terminal-samples">
+                {devModeSamples.map((sample) => (
+                  <button key={sample} type="button" onClick={() => executeCommand(sample)}>
+                    {sample}
+                  </button>
+                ))}
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
