@@ -1,4 +1,13 @@
-import { useEffect, useRef, useState, type FormEvent, type MouseEvent, type ReactNode } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type MouseEvent,
+  type ReactNode,
+} from 'react';
 import {
   aboutNarrative,
   aboutPillars,
@@ -8,9 +17,11 @@ import {
   devModeSamples,
   experienceJourney,
   journalProfile,
+  projectGroups,
   selectedProjects,
   stackFootprint,
   thinkingEntries,
+  type ProjectGroupId,
 } from './data/journal';
 
 type InterfaceMode = 'ui' | 'dev';
@@ -29,10 +40,44 @@ type TerminalEntry = {
   result: string;
 };
 
+type TerminalCommandDefinition = {
+  command: string;
+  description: string;
+};
+
 type CommandResolution =
   | { type: 'append'; result: string }
   | { type: 'clear' }
   | { type: 'ui' };
+
+const COMMAND_HISTORY_STORAGE_KEY = 'portfolio.dev-mode.command-history';
+const MAX_COMMAND_HISTORY = 50;
+const MAX_VISIBLE_PROJECTS_PER_GROUP = 5;
+
+const terminalCommandCatalog: TerminalCommandDefinition[] = [
+  { command: 'help', description: 'Show the full command index and keyboard shortcuts.' },
+  { command: 'about', description: 'Load the short profile and engineering narrative.' },
+  { command: 'projects', description: 'List the project case studies.' },
+  { command: 'project list', description: 'Alias for the full project list.' },
+  { command: 'experience', description: 'Inspect the experience timeline.' },
+  { command: 'stack', description: 'See the current working stack.' },
+  { command: 'thinking', description: 'Open principles, notes, and engineering ideas.' },
+  { command: 'building', description: 'Review hackathon and rapid-build work.' },
+  { command: 'contact', description: 'Show contact links and location.' },
+  { command: 'history', description: 'Print the locally saved command history.' },
+  { command: 'clear', description: 'Clear the terminal output.' },
+  { command: 'ui', description: 'Close Dev Mode and return to the portfolio UI.' },
+  ...selectedProjects.flatMap((project) => [
+    {
+      command: `project ${project.name.toLowerCase()}`,
+      description: `Open the ${project.name} case study.`,
+    },
+    {
+      command: `architecture ${project.name.toLowerCase()}`,
+      description: `Inspect ${project.name} architecture details.`,
+    },
+  ]),
+];
 
 function ChapterPreview({ id, number, title, lead, children }: ChapterPreviewProps) {
   return (
@@ -54,21 +99,84 @@ function formatList(items: string[]) {
   return items.map((item) => `- ${item}`).join('\n');
 }
 
+function loadCommandHistory(): string[] {
+  if (typeof window === 'undefined') {
+    return [];
+  }
+
+  try {
+    const stored = window.localStorage.getItem(COMMAND_HISTORY_STORAGE_KEY);
+    const parsed = stored ? JSON.parse(stored) : [];
+
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed.filter((item): item is string => typeof item === 'string').slice(-MAX_COMMAND_HISTORY);
+  } catch {
+    return [];
+  }
+}
+
+function getCommandSuggestions(input: string): TerminalCommandDefinition[] {
+  const normalized = input.trim().toLowerCase();
+  const featuredCommands = new Set([...devModeSamples, 'history']);
+
+  return terminalCommandCatalog
+    .flatMap((item) => {
+      if (!normalized) {
+        return [{ item, score: featuredCommands.has(item.command) ? 0 : 3 }];
+      }
+
+      const command = item.command.toLowerCase();
+      const description = item.description.toLowerCase();
+      const tokens = normalized.split(/\s+/).filter(Boolean);
+
+      if (command === normalized) {
+        return [{ item, score: 0 }];
+      }
+
+      if (command.startsWith(normalized)) {
+        return [{ item, score: 1 }];
+      }
+
+      if (command.includes(normalized)) {
+        return [{ item, score: 2 }];
+      }
+
+      if (tokens.length > 0 && tokens.every((token) => command.includes(token) || description.includes(token))) {
+        return [{ item, score: 4 }];
+      }
+
+      return [];
+    })
+    .sort((left, right) => {
+      if (left.score !== right.score) {
+        return left.score - right.score;
+      }
+
+      return left.item.command.localeCompare(right.item.command);
+    })
+    .slice(0, normalized ? 6 : 8)
+    .map(({ item }) => item);
+}
+
 function createInitialTerminalEntries(): TerminalEntry[] {
   return [
     {
       id: Date.now(),
       prompt: 'init',
       result: [
-        'Dev Mode indexes the portfolio like a systems console.',
+        'Dev indexes the portfolio like a systems console.',
         'Ask about projects, experience, architecture, stack, thinking, building, or contact.',
+        'Keyboard: Tab autocomplete · ↑ ↓ history · Esc return to UI.',
         `Try: ${devModeSamples.join(' · ')}`,
       ].join('\n'),
     },
   ];
 }
 
-function resolveDevCommand(rawCommand: string): CommandResolution {
+function resolveDevCommand(rawCommand: string, commandHistory: string[] = []): CommandResolution {
   const normalized = rawCommand.trim().toLowerCase();
 
   if (!normalized) {
@@ -91,8 +199,14 @@ function resolveDevCommand(rawCommand: string): CommandResolution {
         'thinking',
         'building',
         'contact',
+        'history',
         'clear',
         'ui',
+        '',
+        'Keyboard',
+        'Tab autocomplete',
+        '↑ ↓ command history',
+        'Esc close terminal',
       ].join('\n'),
     };
   }
@@ -178,6 +292,15 @@ function resolveDevCommand(rawCommand: string): CommandResolution {
     };
   }
 
+  if (normalized === 'history') {
+    return {
+      type: 'append',
+      result: commandHistory.length
+        ? ['Saved command history', ...commandHistory.map((command, index) => `${index + 1}. ${command}`)].join('\n')
+        : 'No saved commands yet. Run a few commands and use ↑ / ↓ to browse them.',
+    };
+  }
+
   if (normalized.startsWith('project ') || normalized.startsWith('architecture ')) {
     const query = normalized.replace(/^project\s+/, '').replace(/^architecture\s+/, '').trim();
     const project = selectedProjects.find((item) => item.name.toLowerCase() === query || item.name.toLowerCase().includes(query));
@@ -224,9 +347,26 @@ function App() {
   const [mode, setMode] = useState<InterfaceMode>('ui');
   const [terminalEntries, setTerminalEntries] = useState<TerminalEntry[]>(() => createInitialTerminalEntries());
   const [terminalCommand, setTerminalCommand] = useState('');
+  const [commandHistory, setCommandHistory] = useState<string[]>(() => loadCommandHistory());
+  const [historyIndex, setHistoryIndex] = useState<number | null>(null);
+  const [historyDraft, setHistoryDraft] = useState('');
+  const [activeProjectGroup, setActiveProjectGroup] = useState<ProjectGroupId>('featured');
   const terminalInputRef = useRef<HTMLInputElement>(null);
   const terminalBodyRef = useRef<HTMLDivElement>(null);
-  const cvUrl = `${import.meta.env.BASE_URL}Harcharan-Singh-CV.md`;
+  const commandSuggestions = useMemo(() => getCommandSuggestions(terminalCommand), [terminalCommand]);
+  const autocompleteSuggestion =
+    commandSuggestions.find((item) => item.command.toLowerCase() !== terminalCommand.trim().toLowerCase()) ?? null;
+  const activeProjectGroupMeta =
+    projectGroups.find((group) => group.id === activeProjectGroup) ?? projectGroups[0];
+  const filteredProjects = useMemo(
+    () => selectedProjects.filter((project) => project.groups.includes(activeProjectGroup)),
+    [activeProjectGroup],
+  );
+  const visibleProjects = useMemo(
+    () => filteredProjects.slice(0, MAX_VISIBLE_PROJECTS_PER_GROUP),
+    [filteredProjects],
+  );
+  const cvUrl = `${import.meta.env.BASE_URL}Harry-Sandhu-CV.md`;
 
   useEffect(() => {
     const sections = document.querySelectorAll<HTMLElement>('[data-reveal]');
@@ -246,6 +386,18 @@ function App() {
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(COMMAND_HISTORY_STORAGE_KEY, JSON.stringify(commandHistory));
+    } catch {
+      // Ignore storage write failures.
+    }
+  }, [commandHistory]);
 
   useEffect(() => {
     if (mode !== 'dev') {
@@ -281,20 +433,87 @@ function App() {
     terminalBody.scrollTop = terminalBody.scrollHeight;
   }, [mode, terminalEntries]);
 
+  function handleTerminalCommandChange(nextCommand: string) {
+    setTerminalCommand(nextCommand);
+    setHistoryDraft(nextCommand);
+    setHistoryIndex(null);
+  }
+
+  function applySuggestedCommand(nextCommand: string) {
+    handleTerminalCommandChange(nextCommand);
+    window.requestAnimationFrame(() => {
+      terminalInputRef.current?.focus();
+    });
+  }
+
+  function browseCommandHistory(direction: 'up' | 'down') {
+    if (commandHistory.length === 0) {
+      return;
+    }
+
+    if (direction === 'up') {
+      if (historyIndex === null) {
+        setHistoryDraft(terminalCommand);
+        const nextIndex = commandHistory.length - 1;
+        setHistoryIndex(nextIndex);
+        setTerminalCommand(commandHistory[nextIndex]);
+        return;
+      }
+
+      const nextIndex = Math.max(0, historyIndex - 1);
+      setHistoryIndex(nextIndex);
+      setTerminalCommand(commandHistory[nextIndex]);
+      return;
+    }
+
+    if (historyIndex === null) {
+      return;
+    }
+
+    const nextIndex = historyIndex + 1;
+
+    if (nextIndex >= commandHistory.length) {
+      setHistoryIndex(null);
+      setTerminalCommand(historyDraft);
+      return;
+    }
+
+    setHistoryIndex(nextIndex);
+    setTerminalCommand(commandHistory[nextIndex]);
+  }
+
+  function saveCommandToHistory(command: string) {
+    setCommandHistory((current) => {
+      const latest = current[current.length - 1];
+
+      if (latest?.toLowerCase() === command.toLowerCase()) {
+        return current;
+      }
+
+      return [...current, command].slice(-MAX_COMMAND_HISTORY);
+    });
+  }
+
   function executeCommand(rawCommand: string) {
     const trimmed = rawCommand.trim();
     if (!trimmed) return;
 
-    const resolution = resolveDevCommand(trimmed);
+    saveCommandToHistory(trimmed);
+
+    const resolution = resolveDevCommand(trimmed, commandHistory);
 
     if (resolution.type === 'clear') {
       setTerminalEntries(createInitialTerminalEntries());
       setTerminalCommand('');
+      setHistoryDraft('');
+      setHistoryIndex(null);
       return;
     }
 
     if (resolution.type === 'ui') {
       setTerminalCommand('');
+      setHistoryDraft('');
+      setHistoryIndex(null);
       setMode('ui');
       return;
     }
@@ -308,11 +527,32 @@ function App() {
       },
     ]);
     setTerminalCommand('');
+    setHistoryDraft('');
+    setHistoryIndex(null);
   }
 
   function handleTerminalSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     executeCommand(terminalCommand);
+  }
+
+  function handleTerminalInputKeyDown(event: ReactKeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Tab' && autocompleteSuggestion) {
+      event.preventDefault();
+      applySuggestedCommand(autocompleteSuggestion.command);
+      return;
+    }
+
+    if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      browseCommandHistory('up');
+      return;
+    }
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      browseCommandHistory('down');
+    }
   }
 
   function handleOverlayClick(event: MouseEvent<HTMLDivElement>) {
@@ -325,11 +565,8 @@ function App() {
     <div className="journal-app">
       <header className="sticky top-0 z-40 border-b border-[rgba(222,179,173,0.75)] bg-[rgba(249,241,240,0.82)] backdrop-blur-xl">
         <div className="journal-shell flex items-center justify-between gap-6 py-4">
-          <a
-            href="#top"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--journal-border)] font-semibold tracking-[0.24em] text-[var(--journal-ink)]"
-          >
-            HS
+          <a href="#top" className="journal-brand" aria-label="HARRY home">
+            HARRY
           </a>
 
           <nav className="hidden items-center gap-6 text-sm md:flex">
@@ -350,7 +587,7 @@ function App() {
               onClick={() => setMode('ui')}
               aria-pressed={mode === 'ui'}
             >
-              UI Mode
+              UI
             </button>
             <button
               type="button"
@@ -358,7 +595,7 @@ function App() {
               onClick={() => setMode('dev')}
               aria-pressed={mode === 'dev'}
             >
-              Dev Mode
+              Dev
             </button>
           </div>
         </div>
@@ -488,89 +725,130 @@ function App() {
         <ChapterPreview
           id="selected-projects"
           number="03"
-          title="Selected Projects"
-          lead="A set of case studies centered on system design, architecture judgment, and the operational realities behind the finished product."
+          title="Projects"
+          lead="A grouped set of case studies. Pick the track you want to inspect and the portfolio will surface the strongest four to five projects in that slice."
         >
-          <div>
-            {selectedProjects.map((project) => (
-              <article key={project.name} className="project-case first:border-t-0 first:pt-0">
-                <div className="project-meta">
-                  <p className="chapter-kicker">{project.year}</p>
-                  <p className="text-sm uppercase tracking-[0.22em] text-[rgba(102,54,53,0.6)]">{project.label}</p>
-                  <h3 className="project-name">{project.name}</h3>
+          <div className="space-y-6">
+            <section className="paper-panel p-6">
+              <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
+                <div className="max-w-2xl">
+                  <p className="detail-label">Project groups</p>
+                  <p className="mt-3 text-base leading-8 text-[rgba(102,54,53,0.8)]">{activeProjectGroupMeta.description}</p>
                 </div>
 
-                <div className="space-y-8">
-                  <p className="text-lg leading-8 text-[rgba(102,54,53,0.84)]">{project.summary}</p>
+                <p className="project-filter-status">
+                  Showing {visibleProjects.length} of {filteredProjects.length} projects · {activeProjectGroupMeta.label}
+                </p>
+              </div>
 
-                  <div className="project-grid">
-                    <div className="space-y-7">
-                      <section>
-                        <p className="detail-label">Problem</p>
-                        <p className="mt-3">{project.problem}</p>
+              <div className="project-filter-row mt-5">
+                {projectGroups.map((group) => (
+                  <button
+                    key={group.id}
+                    type="button"
+                    className={`project-filter-chip ${activeProjectGroup === group.id ? 'is-active' : ''}`}
+                    onClick={() => setActiveProjectGroup(group.id)}
+                    aria-pressed={activeProjectGroup === group.id}
+                  >
+                    {group.label}
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            <div>
+              {visibleProjects.map((project) => (
+                <article key={project.name} className="project-case first:border-t-0 first:pt-0">
+                  <div className="project-meta">
+                    <p className="chapter-kicker">{project.year}</p>
+                    <p className="text-sm uppercase tracking-[0.22em] text-[rgba(102,54,53,0.6)]">{project.label}</p>
+                    <h3 className="project-name">{project.name}</h3>
+                  </div>
+
+                  <div className="space-y-8">
+                    <p className="text-lg leading-8 text-[rgba(102,54,53,0.84)]">{project.summary}</p>
+
+                    <div className="tag-row">
+                      {project.groups
+                        .filter((groupId) => groupId !== 'featured')
+                        .map((groupId) => projectGroups.find((group) => group.id === groupId))
+                        .filter((group): group is (typeof projectGroups)[number] => Boolean(group))
+                        .map((group) => (
+                          <span key={group.id} className="tag-chip">
+                            {group.label}
+                          </span>
+                        ))}
+                    </div>
+
+                    <div className="project-grid">
+                      <div className="space-y-7">
+                        <section>
+                          <p className="detail-label">Problem</p>
+                          <p className="mt-3">{project.problem}</p>
+                        </section>
+
+                        <section>
+                          <p className="detail-label">Architecture</p>
+                          <ul className="technical-list mt-4">
+                            {project.architecture.map((item) => (
+                              <li key={item}>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </section>
+                      </div>
+
+                      <aside className="paper-panel paper-panel-strong p-6">
+                        <p className="detail-label">Architecture sketch</p>
+                        <div className="project-diagram mt-5">
+                          {project.diagram.map((node) => (
+                            <div key={node} className="project-node">
+                              {node}
+                            </div>
+                          ))}
+                        </div>
+                      </aside>
+                    </div>
+
+                    <div className="project-detail-grid">
+                      <section className="paper-panel p-5">
+                        <p className="detail-label">Technologies</p>
+                        <div className="tag-row mt-4">
+                          {project.technologies.map((technology) => (
+                            <span key={technology} className="tag-chip">
+                              {technology}
+                            </span>
+                          ))}
+                        </div>
                       </section>
 
-                      <section>
-                        <p className="detail-label">Architecture</p>
+                      <section className="paper-panel p-5">
+                        <p className="detail-label">Key challenges</p>
                         <ul className="technical-list mt-4">
-                          {project.architecture.map((item) => (
-                            <li key={item}>
-                              <span>{item}</span>
+                          {project.challenges.map((challenge) => (
+                            <li key={challenge}>
+                              <span>{challenge}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </section>
+
+                      <section className="paper-panel p-5 xl:col-span-2">
+                        <p className="detail-label">Outcomes</p>
+                        <ul className="technical-list mt-4">
+                          {project.outcomes.map((outcome) => (
+                            <li key={outcome}>
+                              <span>{outcome}</span>
                             </li>
                           ))}
                         </ul>
                       </section>
                     </div>
-
-                    <aside className="paper-panel paper-panel-strong p-6">
-                      <p className="detail-label">Architecture sketch</p>
-                      <div className="project-diagram mt-5">
-                        {project.diagram.map((node) => (
-                          <div key={node} className="project-node">
-                            {node}
-                          </div>
-                        ))}
-                      </div>
-                    </aside>
                   </div>
-
-                  <div className="project-detail-grid">
-                    <section className="paper-panel p-5">
-                      <p className="detail-label">Technologies</p>
-                      <div className="tag-row mt-4">
-                        {project.technologies.map((technology) => (
-                          <span key={technology} className="tag-chip">
-                            {technology}
-                          </span>
-                        ))}
-                      </div>
-                    </section>
-
-                    <section className="paper-panel p-5">
-                      <p className="detail-label">Key challenges</p>
-                      <ul className="technical-list mt-4">
-                        {project.challenges.map((challenge) => (
-                          <li key={challenge}>
-                            <span>{challenge}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </section>
-
-                    <section className="paper-panel p-5 xl:col-span-2">
-                      <p className="detail-label">Outcomes</p>
-                      <ul className="technical-list mt-4">
-                        {project.outcomes.map((outcome) => (
-                          <li key={outcome}>
-                            <span>{outcome}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </section>
-                  </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              ))}
+            </div>
           </div>
         </ChapterPreview>
 
@@ -705,12 +983,12 @@ function App() {
       </footer>
 
       {mode === 'dev' ? (
-        <div className="terminal-overlay" role="dialog" aria-modal="true" aria-label="Dev mode terminal" onClick={handleOverlayClick}>
+        <div className="terminal-overlay" role="dialog" aria-modal="true" aria-label="Dev terminal" onClick={handleOverlayClick}>
           <div className="terminal-window">
             <div className="terminal-chrome">
-              <span>Harcharan Singh · Dev Mode</span>
-              <button type="button" onClick={() => setMode('ui')} className="journal-nav-link text-left text-[0.72rem] text-white/80">
-                Return to UI
+              <span>harry@portfolio · dev</span>
+              <button type="button" onClick={() => setMode('ui')} className="terminal-action">
+                esc · ui
               </button>
             </div>
 
@@ -725,26 +1003,25 @@ function App() {
 
             <form className="terminal-form" onSubmit={handleTerminalSubmit}>
               <div className="terminal-input-row">
-                <span className="terminal-prompt">$</span>
+                <span className="terminal-prompt">hs@portfolio:~$</span>
                 <input
                   ref={terminalInputRef}
                   value={terminalCommand}
-                  onChange={(event) => setTerminalCommand(event.target.value)}
+                  onChange={(event) => handleTerminalCommandChange(event.target.value)}
+                  onKeyDown={handleTerminalInputKeyDown}
                   className="terminal-input"
-                  placeholder="query projects, architecture, experience, stack..."
+                  placeholder="type help"
                   aria-label="Dev mode command input"
+                  autoComplete="off"
+                  spellCheck={false}
                 />
-                <button type="submit" className="terminal-submit">
-                  Run
-                </button>
               </div>
 
-              <div className="terminal-samples">
-                {devModeSamples.map((sample) => (
-                  <button key={sample} type="button" onClick={() => executeCommand(sample)}>
-                    {sample}
-                  </button>
-                ))}
+              <div className="terminal-statusbar" aria-label="Terminal status">
+                <span>enter run</span>
+                <span>tab {autocompleteSuggestion ? autocompleteSuggestion.command : 'complete'}</span>
+                <span>↑↓ history</span>
+                <span>{commandHistory.length} saved</span>
               </div>
             </form>
           </div>

@@ -1,4 +1,4 @@
-# Harcharan Singh Portfolio
+# Harry Sandhu Portfolio
 
 Editorial, systems-first portfolio built with React, TypeScript, Vite, and Tailwind CSS.
 
@@ -31,4 +31,4 @@ In repo settings:
 - `src/data/journal.ts` — structured content for chapters, experience, projects, and thinking notes
 - `src/index.css` — journal design system and terminal styling
 - `docs/portfolio-phase-01-blueprint.md` — content and narrative blueprint
-- `public/Harcharan-Singh-CV.md` — downloadable CV
+- `public/Harry-Sandhu-CV.md` — downloadable CV

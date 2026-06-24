@@ -31,6 +31,14 @@ export type ExperienceEntry = {
   systems: string[];
 };
 
+export type ProjectGroupId = 'featured' | 'ai' | 'realtime' | 'platform' | 'systems';
+
+export type ProjectGroup = {
+  id: ProjectGroupId;
+  label: string;
+  description: string;
+};
+
 export type ProjectCaseStudy = {
   name: string;
   label: string;
@@ -42,6 +50,7 @@ export type ProjectCaseStudy = {
   technologies: string[];
   challenges: string[];
   outcomes: string[];
+  groups: ProjectGroupId[];
 };
 
 export type BuildEntry = {
@@ -61,13 +70,13 @@ export type ThinkingEntry = {
 export const chapterLinks: ChapterLink[] = [
   { id: 'who-i-am', number: '01', title: 'Who I Am' },
   { id: 'experience', number: '02', title: 'Experience' },
-  { id: 'selected-projects', number: '03', title: 'Selected Projects' },
+  { id: 'selected-projects', number: '03', title: 'Projects' },
   { id: 'building', number: '04', title: 'Hackathons & Building' },
   { id: 'thinking', number: '05', title: 'Thinking' },
 ];
 
 export const journalProfile: JournalProfile = {
-  name: 'Harcharan Singh',
+  name: 'Harry Sandhu',
   role: 'Software Engineer',
   supportLine: 'Backend Systems, Applied AI, Realtime Platforms, Developer Tooling',
   preface: 'A technical journal of systems, products, and engineering decisions.',
@@ -79,7 +88,7 @@ export const journalProfile: JournalProfile = {
 };
 
 export const aboutNarrative = [
-  'Harcharan Singh is an engineer focused on backend systems, distributed architectures, AI infrastructure, developer tooling, realtime systems, and product engineering.',
+  'Harry Sandhu is an engineer focused on backend systems, distributed architectures, AI infrastructure, developer tooling, realtime systems, and product engineering.',
   'His work sits at the intersection of reliability and velocity: building services that are operationally calm, technically legible, and ready for production constraints.',
   'Across startups, enterprise systems, and fast-moving prototypes, the through-line is the same: clear architecture, strong ownership, and software that continues to hold together after launch.',
 ];
@@ -154,6 +163,34 @@ export const experienceJourney: ExperienceEntry[] = [
   },
 ];
 
+export const projectGroups: ProjectGroup[] = [
+  {
+    id: 'featured',
+    label: 'Featured',
+    description: 'The clearest signal projects: flagship work across architecture, AI, product systems, and operational depth.',
+  },
+  {
+    id: 'ai',
+    label: 'AI Systems',
+    description: 'Retrieval, recommendations, agents, evaluation loops, and AI infrastructure built as real product systems.',
+  },
+  {
+    id: 'realtime',
+    label: 'Realtime',
+    description: 'Presence, multiplayer state, collaboration, and low-latency delivery where ordering and trust matter.',
+  },
+  {
+    id: 'platform',
+    label: 'Platform Ops',
+    description: 'Backoffice tooling, workflow orchestration, operator visibility, and backend systems that support live operations.',
+  },
+  {
+    id: 'systems',
+    label: 'Systems Design',
+    description: 'Runtime boundaries, distributed workers, orchestration layers, and architecture decisions under real constraints.',
+  },
+];
+
 export const selectedProjects: ProjectCaseStudy[] = [
   {
     name: 'Beacon',
@@ -179,6 +216,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Created a stable foundation for presence, activity streams, and collaborative workflows.',
       'Improved confidence in session recovery and observability during active usage.',
     ],
+    groups: ['featured', 'ai', 'realtime', 'systems'],
   },
   {
     name: 'Atlas',
@@ -204,6 +242,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Turned AI functionality into an inspectable product system rather than a black box.',
       'Established reusable infrastructure for search, answer generation, and evaluation.',
     ],
+    groups: ['featured', 'ai', 'platform'],
   },
   {
     name: 'Noble',
@@ -229,6 +268,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Produced a backend architecture that supported both product speed and operational trust.',
       'Made financial flows inspectable for both users and internal operators.',
     ],
+    groups: ['featured', 'realtime', 'platform', 'systems'],
   },
   {
     name: 'Kairos',
@@ -254,6 +294,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Clarified how systems-level interfaces can remain extensible without becoming opaque.',
       'Strengthened judgment around runtime boundaries and developer-facing architecture.',
     ],
+    groups: ['featured', 'systems'],
   },
   {
     name: 'Pantha',
@@ -279,6 +320,111 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Created a stronger backend basis for adaptive learning experiences.',
       'Linked retrieval, recommendations, and low-latency delivery into one coherent system.',
     ],
+    groups: ['featured', 'ai'],
+  },
+  {
+    name: 'Hectare',
+    label: 'Agritech intelligence',
+    year: '2024',
+    summary:
+      'A multimodal agricultural intelligence system combining farm signals, model outputs, and operator workflows into one usable product surface.',
+    problem:
+      'Agricultural recommendations are only useful when imagery, weather, field data, and agronomy signals can be turned into practical decisions for both farmers and internal teams.',
+    architecture: [
+      'Data pipelines normalized imagery, telemetry, weather inputs, and field reports into a common feature layer.',
+      'Inference services translated multimodal signals into disease, nutrient, and intervention recommendations.',
+      'Dashboards and advisory interfaces surfaced results in forms operators could inspect and act on quickly.',
+    ],
+    diagram: ['Field Signals', 'Feature Pipeline', 'Inference Layer', 'Ops Dashboard', 'Advisory Engine'],
+    technologies: ['Python', 'FastAPI', 'React', 'Computer Vision', 'Azure', 'AWS'],
+    challenges: [
+      'Combining heterogeneous data sources without losing traceability.',
+      'Turning model output into workflows real operators could trust.',
+      'Balancing experimentation with production delivery constraints.',
+    ],
+    outcomes: [
+      'Established a stronger base for AI-assisted agricultural decisions and field-level monitoring.',
+      'Reported disease-detection performance reaching up to 98% in multimodal evaluation workflows.',
+    ],
+    groups: ['ai', 'platform'],
+  },
+  {
+    name: 'CreditKuber',
+    label: 'Lending operations platform',
+    year: '2024',
+    summary:
+      'An AI-assisted lending and workflow platform built around onboarding, risk support, repayment operations, and audit-ready internal tooling.',
+    problem:
+      'Lending teams need far more than application forms. They need backend control over underwriting, collections, reporting, access control, and operator visibility.',
+    architecture: [
+      'Workflow services handled onboarding, underwriting support, repayment stages, and collection operations.',
+      'Background jobs processed notifications, risk signals, and reporting workflows without blocking operator activity.',
+      'RBAC-aware admin tooling exposed audit trails, exceptions, and operational state across the lending lifecycle.',
+    ],
+    diagram: ['Applicant Flow', 'Risk Engine', 'Ops Console', 'Background Jobs', 'Reporting'],
+    technologies: ['React', 'Node.js', 'PostgreSQL', 'RBAC', 'Background Jobs'],
+    challenges: [
+      'Keeping workflow state and operator visibility aligned across long-running financial flows.',
+      'Designing internal tooling that supported exceptions instead of only ideal happy paths.',
+      'Maintaining product speed while preserving compliance-oriented auditability.',
+    ],
+    outcomes: [
+      'Created a more inspectable operational platform for lending workflows and internal teams.',
+      'Strengthened judgment around workflow automation, financial state handling, and admin tooling.',
+    ],
+    groups: ['ai', 'platform'],
+  },
+  {
+    name: 'CraftMy.World',
+    label: 'Distributed worker orchestration',
+    year: '2025',
+    summary:
+      'A distributed execution platform for planning, coordinating, and monitoring many workers across long-running automation workflows.',
+    problem:
+      'Once many agents or workers must coordinate over long tasks, simple queue processing stops being enough. The system needs ownership, heartbeats, recovery, and progress visibility.',
+    architecture: [
+      'Planning services broke requested work into executable tasks with dependency-aware scheduling.',
+      'Worker coordinators handled assignment, heartbeats, stale-worker detection, and recovery flows.',
+      'Operational dashboards surfaced execution state, throughput, and failure context for live control.',
+    ],
+    diagram: ['Planner', 'Task Queue', 'Worker Mesh', 'State Store', 'Ops Dashboard'],
+    technologies: ['Node.js', 'Redis', 'WebSockets', 'Worker Orchestration', 'Telemetry'],
+    challenges: [
+      'Recovering cleanly from stale workers and partially completed work.',
+      'Making long-running distributed execution observable to operators.',
+      'Keeping orchestration logic flexible as task complexity grew.',
+    ],
+    outcomes: [
+      'Produced a clearer model for ownership, recovery, and large-scale worker coordination.',
+      'Strengthened distributed-systems thinking around orchestration and live operational control.',
+    ],
+    groups: ['realtime', 'platform', 'systems'],
+  },
+  {
+    name: 'The Dilemma Protocol',
+    label: 'Realtime multiplayer systems',
+    year: '2024',
+    summary:
+      'A multiplayer architecture study focused on synchronized sessions, authoritative validation, reconnect handling, and fair realtime state transitions.',
+    problem:
+      'Realtime multiplayer products become fragile when timing, reconnects, and state validation are treated as afterthoughts. This project focused on trust and fairness under gameplay pressure.',
+    architecture: [
+      'An authoritative game server owned timing, validation, and synchronized state transitions.',
+      'Session-recovery flows handled reconnects, replay generation, and user continuity during interruptions.',
+      'Automated tests verified gameplay rules, edge cases, timing logic, and state integrity.',
+    ],
+    diagram: ['Clients', 'Authoritative Server', 'Session Recovery', 'Replay Pipeline', 'Leaderboard'],
+    technologies: ['Node.js', 'Socket.IO', 'Redis', 'Testing', 'Realtime State'],
+    challenges: [
+      'Keeping multiplayer state fair and deterministic under reconnects and timing pressure.',
+      'Building enough test coverage for user-visible synchronization rules.',
+      'Balancing responsiveness with authoritative backend control.',
+    ],
+    outcomes: [
+      'Improved judgment around realtime authority models, recovery flows, and fairness-oriented systems.',
+      'Created a stronger architecture pattern for multiplayer reliability and session continuity.',
+    ],
+    groups: ['realtime', 'systems'],
   },
 ];
 

@@ -1,4 +1,4 @@
-# CV -- Harcharan Singh
+# CV -- Harry Sandhu
 
 **Location:** Mumbai, India  
 **Email:** singh.harcharan2003@gmail.com  
