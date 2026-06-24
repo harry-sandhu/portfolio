@@ -95,10 +95,13 @@
   }
 
   .journal-brand {
+    display: inline-flex;
+    align-items: center;
     font-family: var(--journal-mono);
-    font-size: 0.86rem;
-    font-weight: 700;
-    letter-spacing: 0.34em;
+    font-size: 1.08rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.26em;
     text-transform: uppercase;
     color: var(--journal-ink);
   }
@@ -302,6 +305,25 @@
     color: rgba(102, 54, 53, 0.58);
   }
 
+  .project-filter-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .project-filter-tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.9rem;
+  }
+
+  .project-filter-copy {
+    color: rgba(102, 54, 53, 0.8);
+    line-height: 1.8;
+  }
+
   .project-filter-row {
     display: flex;
     flex-wrap: wrap;
@@ -344,6 +366,35 @@
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: rgba(102, 54, 53, 0.55);
+  }
+
+  .project-filter-reset {
+    border: 1px solid rgba(222, 179, 173, 0.8);
+    border-radius: 999px;
+    padding: 0.52rem 0.88rem;
+    font-family: var(--journal-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--journal-ink);
+    background: rgba(255, 252, 251, 0.65);
+    transition:
+      border-color 180ms ease,
+      background-color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .project-filter-reset:hover,
+  .project-filter-reset:focus-visible {
+    border-color: rgba(225, 153, 159, 0.58);
+    background: rgba(255, 252, 251, 0.9);
+    transform: translateY(-1px);
+  }
+
+  .project-filter-note {
+    margin-top: 0.95rem;
+    font-size: 0.86rem;
+    color: rgba(102, 54, 53, 0.66);
   }
 
   .project-case {
@@ -594,6 +645,12 @@
       grid-template-columns: 220px minmax(0, 1fr);
     }
 
+    .project-filter-header {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
     .project-grid {
       grid-template-columns: 1.15fr 0.85fr;
       align-items: start;
@@ -623,6 +680,7 @@
   .mode-switch button,
   .journal-nav-link,
   .project-filter-chip,
+  .project-filter-reset,
   .terminal-action {
     transition: none !important;
     transform: none !important;

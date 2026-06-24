@@ -31,10 +31,19 @@ export type ExperienceEntry = {
   systems: string[];
 };
 
-export type ProjectGroupId = 'featured' | 'ai' | 'realtime' | 'platform' | 'systems';
+export type ProjectTagId =
+  | 'featured'
+  | 'ai'
+  | 'realtime'
+  | 'platform'
+  | 'systems'
+  | 'fintech'
+  | 'web3'
+  | 'education'
+  | 'agritech';
 
-export type ProjectGroup = {
-  id: ProjectGroupId;
+export type ProjectTag = {
+  id: ProjectTagId;
   label: string;
   description: string;
 };
@@ -50,7 +59,7 @@ export type ProjectCaseStudy = {
   technologies: string[];
   challenges: string[];
   outcomes: string[];
-  groups: ProjectGroupId[];
+  tags: ProjectTagId[];
 };
 
 export type BuildEntry = {
@@ -163,7 +172,7 @@ export const experienceJourney: ExperienceEntry[] = [
   },
 ];
 
-export const projectGroups: ProjectGroup[] = [
+export const projectTags: ProjectTag[] = [
   {
     id: 'featured',
     label: 'Featured',
@@ -188,6 +197,26 @@ export const projectGroups: ProjectGroup[] = [
     id: 'systems',
     label: 'Systems Design',
     description: 'Runtime boundaries, distributed workers, orchestration layers, and architecture decisions under real constraints.',
+  },
+  {
+    id: 'fintech',
+    label: 'Fintech',
+    description: 'Ledgers, money movement, lending workflows, audit trails, and operational trust in financial systems.',
+  },
+  {
+    id: 'web3',
+    label: 'Web3',
+    description: 'Wallet-connected flows, blockchain integrations, treasury operations, and decentralized product surfaces.',
+  },
+  {
+    id: 'education',
+    label: 'Education',
+    description: 'Learning systems, recommendations, retrieval-backed knowledge delivery, and adaptive user flows.',
+  },
+  {
+    id: 'agritech',
+    label: 'Agritech',
+    description: 'Farm operations, agricultural intelligence, field data processing, and product workflows for real users.',
   },
 ];
 
@@ -216,7 +245,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Created a stable foundation for presence, activity streams, and collaborative workflows.',
       'Improved confidence in session recovery and observability during active usage.',
     ],
-    groups: ['featured', 'ai', 'realtime', 'systems'],
+    tags: ['featured', 'ai', 'realtime', 'systems'],
   },
   {
     name: 'Atlas',
@@ -242,7 +271,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Turned AI functionality into an inspectable product system rather than a black box.',
       'Established reusable infrastructure for search, answer generation, and evaluation.',
     ],
-    groups: ['featured', 'ai', 'platform'],
+    tags: ['featured', 'ai', 'platform'],
   },
   {
     name: 'Noble',
@@ -268,7 +297,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Produced a backend architecture that supported both product speed and operational trust.',
       'Made financial flows inspectable for both users and internal operators.',
     ],
-    groups: ['featured', 'realtime', 'platform', 'systems'],
+    tags: ['featured', 'realtime', 'platform', 'fintech', 'web3'],
   },
   {
     name: 'Kairos',
@@ -294,7 +323,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Clarified how systems-level interfaces can remain extensible without becoming opaque.',
       'Strengthened judgment around runtime boundaries and developer-facing architecture.',
     ],
-    groups: ['featured', 'systems'],
+    tags: ['featured', 'systems'],
   },
   {
     name: 'Pantha',
@@ -320,7 +349,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Created a stronger backend basis for adaptive learning experiences.',
       'Linked retrieval, recommendations, and low-latency delivery into one coherent system.',
     ],
-    groups: ['featured', 'ai'],
+    tags: ['featured', 'ai', 'education'],
   },
   {
     name: 'Hectare',
@@ -346,7 +375,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Established a stronger base for AI-assisted agricultural decisions and field-level monitoring.',
       'Reported disease-detection performance reaching up to 98% in multimodal evaluation workflows.',
     ],
-    groups: ['ai', 'platform'],
+    tags: ['ai', 'platform', 'agritech'],
   },
   {
     name: 'CreditKuber',
@@ -372,7 +401,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Created a more inspectable operational platform for lending workflows and internal teams.',
       'Strengthened judgment around workflow automation, financial state handling, and admin tooling.',
     ],
-    groups: ['ai', 'platform'],
+    tags: ['ai', 'platform', 'fintech'],
   },
   {
     name: 'CraftMy.World',
@@ -398,7 +427,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Produced a clearer model for ownership, recovery, and large-scale worker coordination.',
       'Strengthened distributed-systems thinking around orchestration and live operational control.',
     ],
-    groups: ['realtime', 'platform', 'systems'],
+    tags: ['realtime', 'platform', 'systems'],
   },
   {
     name: 'The Dilemma Protocol',
@@ -424,7 +453,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Improved judgment around realtime authority models, recovery flows, and fairness-oriented systems.',
       'Created a stronger architecture pattern for multiplayer reliability and session continuity.',
     ],
-    groups: ['realtime', 'systems'],
+    tags: ['realtime', 'systems'],
   },
 ];
 

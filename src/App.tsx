@@ -17,11 +17,11 @@ import {
   devModeSamples,
   experienceJourney,
   journalProfile,
-  projectGroups,
+  projectTags,
   selectedProjects,
   stackFootprint,
   thinkingEntries,
-  type ProjectGroupId,
+  type ProjectTagId,
 } from './data/journal';
 
 type InterfaceMode = 'ui' | 'dev';
@@ -52,7 +52,8 @@ type CommandResolution =
 
 const COMMAND_HISTORY_STORAGE_KEY = 'portfolio.dev-mode.command-history';
 const MAX_COMMAND_HISTORY = 50;
-const MAX_VISIBLE_PROJECTS_PER_GROUP = 5;
+const MAX_VISIBLE_PROJECTS = 5;
+const DEFAULT_PROJECT_TAGS: ProjectTagId[] = ['featured'];
 
 const terminalCommandCatalog: TerminalCommandDefinition[] = [
   { command: 'help', description: 'Show the full command index and keyboard shortcuts.' },
@@ -350,22 +351,30 @@ function App() {
   const [commandHistory, setCommandHistory] = useState<string[]>(() => loadCommandHistory());
   const [historyIndex, setHistoryIndex] = useState<number | null>(null);
   const [historyDraft, setHistoryDraft] = useState('');
-  const [activeProjectGroup, setActiveProjectGroup] = useState<ProjectGroupId>('featured');
+  const [selectedProjectTags, setSelectedProjectTags] = useState<ProjectTagId[]>(DEFAULT_PROJECT_TAGS);
   const terminalInputRef = useRef<HTMLInputElement>(null);
   const terminalBodyRef = useRef<HTMLDivElement>(null);
   const commandSuggestions = useMemo(() => getCommandSuggestions(terminalCommand), [terminalCommand]);
   const autocompleteSuggestion =
     commandSuggestions.find((item) => item.command.toLowerCase() !== terminalCommand.trim().toLowerCase()) ?? null;
-  const activeProjectGroupMeta =
-    projectGroups.find((group) => group.id === activeProjectGroup) ?? projectGroups[0];
-  const filteredProjects = useMemo(
-    () => selectedProjects.filter((project) => project.groups.includes(activeProjectGroup)),
-    [activeProjectGroup],
+  const selectedTagMeta = useMemo(
+    () => projectTags.filter((tag) => selectedProjectTags.includes(tag.id)),
+    [selectedProjectTags],
   );
-  const visibleProjects = useMemo(
-    () => filteredProjects.slice(0, MAX_VISIBLE_PROJECTS_PER_GROUP),
-    [filteredProjects],
-  );
+  const filteredProjects = useMemo(() => {
+    if (selectedProjectTags.length === 0) {
+      return selectedProjects;
+    }
+
+    return selectedProjects.filter((project) => selectedProjectTags.some((tag) => project.tags.includes(tag)));
+  }, [selectedProjectTags]);
+  const visibleProjects = useMemo(() => filteredProjects.slice(0, MAX_VISIBLE_PROJECTS), [filteredProjects]);
+  const activeProjectFilterDescription =
+    selectedTagMeta.length === 0
+      ? 'Showing the full project pool. Select one or more tags to narrow the list, and projects will match any tag you activate.'
+      : selectedTagMeta.length === 1
+        ? selectedTagMeta[0].description
+        : `Matching any selected tag across ${selectedTagMeta.map((tag) => tag.label).join(' · ')}.`;
   const cvUrl = `${import.meta.env.BASE_URL}Harry-Sandhu-CV.md`;
 
   useEffect(() => {
@@ -480,6 +489,16 @@ function App() {
 
     setHistoryIndex(nextIndex);
     setTerminalCommand(commandHistory[nextIndex]);
+  }
+
+  function toggleProjectTag(tagId: ProjectTagId) {
+    setSelectedProjectTags((current) =>
+      current.includes(tagId) ? current.filter((item) => item !== tagId) : [...current, tagId],
+    );
+  }
+
+  function resetProjectTags() {
+    setSelectedProjectTags(DEFAULT_PROJECT_TAGS);
   }
 
   function saveCommandToHistory(command: string) {
@@ -726,34 +745,42 @@ function App() {
           id="selected-projects"
           number="03"
           title="Projects"
-          lead="A grouped set of case studies. Pick the track you want to inspect and the portfolio will surface the strongest four to five projects in that slice."
+          lead="There are more projects behind the portfolio than any single landing section should dump at once. Use tags to slice the work by what someone actually wants to inspect."
         >
           <div className="space-y-6">
             <section className="paper-panel p-6">
-              <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
-                <div className="max-w-2xl">
-                  <p className="detail-label">Project groups</p>
-                  <p className="mt-3 text-base leading-8 text-[rgba(102,54,53,0.8)]">{activeProjectGroupMeta.description}</p>
+              <div className="project-filter-header">
+                <div className="max-w-3xl">
+                  <p className="detail-label">Project tags</p>
+                  <p className="project-filter-copy mt-3">{activeProjectFilterDescription}</p>
                 </div>
 
-                <p className="project-filter-status">
-                  Showing {visibleProjects.length} of {filteredProjects.length} projects · {activeProjectGroupMeta.label}
-                </p>
+                <div className="project-filter-tools">
+                  <p className="project-filter-status">
+                    Showing {visibleProjects.length} of {filteredProjects.length} matches ·{' '}
+                    {selectedProjectTags.length > 0 ? `${selectedProjectTags.length} active tags` : 'all tags'}
+                  </p>
+                  <button type="button" className="project-filter-reset" onClick={resetProjectTags}>
+                    Reset to featured
+                  </button>
+                </div>
               </div>
 
               <div className="project-filter-row mt-5">
-                {projectGroups.map((group) => (
+                {projectTags.map((tag) => (
                   <button
-                    key={group.id}
+                    key={tag.id}
                     type="button"
-                    className={`project-filter-chip ${activeProjectGroup === group.id ? 'is-active' : ''}`}
-                    onClick={() => setActiveProjectGroup(group.id)}
-                    aria-pressed={activeProjectGroup === group.id}
+                    className={`project-filter-chip ${selectedProjectTags.includes(tag.id) ? 'is-active' : ''}`}
+                    onClick={() => toggleProjectTag(tag.id)}
+                    aria-pressed={selectedProjectTags.includes(tag.id)}
                   >
-                    {group.label}
+                    {tag.label}
                   </button>
                 ))}
               </div>
+
+              <p className="project-filter-note">Projects match any selected tag. Select multiple tags to broaden the slice.</p>
             </section>
 
             <div>
@@ -769,13 +796,12 @@ function App() {
                     <p className="text-lg leading-8 text-[rgba(102,54,53,0.84)]">{project.summary}</p>
 
                     <div className="tag-row">
-                      {project.groups
-                        .filter((groupId) => groupId !== 'featured')
-                        .map((groupId) => projectGroups.find((group) => group.id === groupId))
-                        .filter((group): group is (typeof projectGroups)[number] => Boolean(group))
-                        .map((group) => (
-                          <span key={group.id} className="tag-chip">
-                            {group.label}
+                      {project.tags
+                        .map((tagId) => projectTags.find((tag) => tag.id === tagId))
+                        .filter((tag): tag is (typeof projectTags)[number] => Boolean(tag))
+                        .map((tag) => (
+                          <span key={tag.id} className="tag-chip">
+                            {tag.label}
                           </span>
                         ))}
                     </div>
@@ -848,6 +874,13 @@ function App() {
                   </div>
                 </article>
               ))}
+
+              {visibleProjects.length === 0 ? (
+                <section className="paper-panel p-6">
+                  <p className="detail-label">No matching projects</p>
+                  <p className="project-filter-copy mt-3">That tag combination is too narrow right now. Clear one of the tags or reset back to the featured slice.</p>
+                </section>
+              ) : null}
             </div>
           </div>
         </ChapterPreview>
