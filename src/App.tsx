@@ -52,7 +52,7 @@ type CommandResolution =
 
 const COMMAND_HISTORY_STORAGE_KEY = 'portfolio.dev-mode.command-history';
 const MAX_COMMAND_HISTORY = 50;
-const MAX_VISIBLE_PROJECTS = 5;
+const MAX_VISIBLE_PROJECTS = 6;
 const DEFAULT_PROJECT_TAGS: ProjectTagId[] = ['featured'];
 
 const terminalCommandCatalog: TerminalCommandDefinition[] = [
@@ -249,7 +249,7 @@ function resolveDevCommand(rawCommand: string, commandHistory: string[] = []): C
       result: experienceJourney
         .map(
           (entry) =>
-            `${entry.company} — ${entry.role} (${entry.period})\n${entry.summary}\n${formatList(entry.focus)}`,
+            `${entry.company} - ${entry.role} (${entry.period})\n${entry.summary}\n${formatList(entry.focus)}`,
         )
         .join('\n\n'),
     };
@@ -959,7 +959,7 @@ function App() {
                 small principles, operating assumptions, and reminders about what actually matters once software meets reality.
               </p>
               <p>
-                The writing here should grow over time — around system design, AI infrastructure, developer experience,
+                The writing here should grow over time, around system design, AI infrastructure, developer experience,
                 operational clarity, and how engineering decisions influence product trust.
               </p>
 
@@ -993,7 +993,7 @@ function App() {
           <div>
             <p className="chapter-kicker">Colophon</p>
             <p className="mt-3 max-w-2xl text-base leading-8 text-[rgba(102,54,53,0.78)]">
-              Built as a calm technical document — focused on systems, product judgment, and the engineering story behind the
+              Built as a calm technical document focused on systems, product judgment, and the engineering story behind the
               work.
             </p>
           </div>

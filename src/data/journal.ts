@@ -131,7 +131,7 @@ export const experienceJourney: ExperienceEntry[] = [
   {
     company: 'WetAcre',
     role: 'Founding Developer',
-    period: 'Jul 2023 — May 2025',
+    period: 'Jul 2023 - May 2025',
     location: 'Remote',
     summary:
       'Owned product and engineering foundations for an agritech platform serving farmers, operators, and internal teams across live production workflows.',
@@ -145,7 +145,7 @@ export const experienceJourney: ExperienceEntry[] = [
   {
     company: 'Forsys',
     role: 'Software Engineer · Backend / CRM Systems',
-    period: 'Jun 2025 — Jan 2026',
+    period: 'Jun 2025 - Jan 2026',
     location: 'Hyderabad, India',
     summary:
       'Worked inside enterprise delivery environments, improving workflow automation, deployment quality, and backend reliability for CRM-adjacent systems.',
@@ -159,7 +159,7 @@ export const experienceJourney: ExperienceEntry[] = [
   {
     company: 'Trinitum',
     role: 'Software Engineer · Backend / Systems',
-    period: 'Jan 2026 — Present',
+    period: 'Jan 2026 - Present',
     location: 'Mumbai, India',
     summary:
       'Building security-conscious distributed systems focused on storage orchestration, encryption, service boundaries, and resilient backend design.',
@@ -221,6 +221,33 @@ export const projectTags: ProjectTag[] = [
 ];
 
 export const selectedProjects: ProjectCaseStudy[] = [
+  {
+    name: 'Cinder',
+    label: 'Semantic runtime / browser SDK',
+    year: '2026',
+    summary:
+      'A browser-first semantic runtime that turns tagged web application UI into a graph-aware command layer, resolving voice and text commands locally against the DOM before using optional fallback inference.',
+    problem:
+      'Supporting commands like “open reports”, “save changes”, or “filter by district” usually forces teams to stitch together speech recognition, intent parsing, context handling, action dispatch, and AI fallback as separate systems. Cinder was built to package that into one local-first runtime.',
+    architecture: [
+      'A semantic scanner reads tagged UI elements, extracts metadata from the DOM, and builds a route/context-aware application graph of actions, fields, filters, outputs, and data nodes.',
+      'A graph query and intent layer normalizes text or speech input, prefers deterministic local planners, and uses a hybrid hot/cold graph so known routes can be reasoned about even before they are rendered.',
+      'A DOM-native dispatcher executes the resolved command against the real interface, while a Fastify fallback service returns normalized structured intents only when local confidence is weak.',
+    ],
+    diagram: ['Tagged UI', 'Semantic Scanner', 'Application Graph', 'Intent Engine', 'DOM Dispatch'],
+    technologies: ['TypeScript', 'React', 'Vite', 'Tailwind CSS', 'MDX', 'Fastify', 'npm workspaces', 'Web Speech API'],
+    challenges: [
+      'Designing deterministic local resolution so common commands did not depend on cloud-first inference.',
+      'Modeling both rendered DOM state and non-rendered routes through a hybrid hot/cold graph without losing execution clarity.',
+      'Keeping fallback bounded and normalized so the product behaved like a semantic runtime instead of a thin chatbot wrapper.',
+    ],
+    outcomes: [
+      'Built a working monorepo with a browser SDK, shared contracts package, Fastify inference server, and a React/Vite/Tailwind/MDX docs site that dogfoods the runtime.',
+      'Validated semantic scanning, graph construction, route-aware resolution, dispatch behavior, speech unsupported-path handling, and fallback flows through the MVP validation suite.',
+      'Framed commandable web interfaces as an application-graph problem, creating a stronger systems foundation than prompt-only orchestration.',
+    ],
+    tags: ['featured', 'ai', 'platform', 'systems'],
+  },
   {
     name: 'Beacon',
     label: 'Realtime collaboration',
@@ -540,4 +567,13 @@ export const stackFootprint = [
   'RAG / Embeddings / Vector Retrieval / Agents',
 ];
 
-export const devModeSamples = ['help', 'projects', 'project atlas', 'experience', 'stack', 'thinking', 'contact'];
+export const devModeSamples = [
+  'help',
+  'projects',
+  'project cinder',
+  'project atlas',
+  'experience',
+  'stack',
+  'thinking',
+  'contact',
+];
