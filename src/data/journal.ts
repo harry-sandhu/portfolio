@@ -87,27 +87,27 @@ export const journalProfile: JournalProfile = {
 };
 
 export const aboutNarrative = [
-  'Harry Sandhu is an engineer focused on backend systems, full-stack delivery, and developer tooling.',
-  'His work sits at the intersection of reliability and velocity: building services that are operationally calm, technically legible, and ready for production constraints.',
-  'Across startups, enterprise systems, and self-directed projects, the through-line is the same: clear architecture, strong ownership, and documentation that tells the truth about what is and isn’t finished.',
+  'Harry Sandhu builds backend systems, full-stack products, and developer tooling.',
+  'Most of the work lives where reliability and speed collide — services that stay calm under load, stay legible to whoever reads them next, and hold up once they hit production.',
+  'The common thread across startups, enterprise work, and personal projects isn’t a tech stack. It’s that the architecture is explainable, and the docs don’t pretend something works when it doesn’t.',
 ];
 
 export const aboutPillars: AboutPillar[] = [
   {
     title: 'Backend Systems',
-    body: 'Service boundaries, typed APIs, queues, storage workflows, and operational correctness.',
+    body: 'Service boundaries, typed APIs, queues, storage — the unglamorous stuff that has to be correct.',
   },
   {
     title: 'Full-Stack Delivery',
-    body: 'Shipping both sides of a product — React/Next.js frontends paired with backends that hold up under real use.',
+    body: 'Comfortable on both sides of the wire: React/Next.js frontends, backends that survive contact with real users.',
   },
   {
     title: 'Developer Tooling',
-    body: 'Internal tools, CLIs, and runtimes that reduce friction for whoever uses them next, including future me.',
+    body: 'Internal tools and CLIs built to cut friction for whoever uses them next — usually that’s future me.',
   },
   {
     title: 'Systems Thinking',
-    body: 'Treating constraints — a size budget, a permission model, a compatibility rule — as the design problem itself.',
+    body: 'A size budget, a permission model, a compatibility rule — treating the constraint itself as the design problem.',
   },
 ];
 
@@ -193,9 +193,9 @@ export const selectedProjects: ProjectCaseStudy[] = [
     visibility: 'private-startup',
     visibilityLabel: 'Private Startup Project',
     summary:
-      'A browser-first semantic runtime that turns tagged web application UI into a graph-aware command layer, resolving voice and text commands locally against the DOM before using optional fallback inference.',
+      'A browser-first runtime that turns tagged UI into something a voice or text command can act on — it builds a graph of the app, resolves intent locally against that graph, and only reaches for an AI fallback when it has to.',
     problem:
-      'Supporting commands like “open reports”, “save changes”, or “filter by district” usually forces teams to stitch together speech recognition, intent parsing, context handling, action dispatch, and AI fallback as separate systems. Cinder packages that into one local-first runtime.',
+      'Commands like “open reports” or “filter by district” usually mean stitching together speech recognition, intent parsing, context handling, dispatch, and an AI fallback as separate systems. Cinder folds all of that into one local-first runtime instead.',
     architecture: [
       'A semantic scanner reads tagged UI elements and builds a route/context-aware application graph of actions, fields, filters, and data nodes.',
       'A graph query and intent layer normalizes text or speech input and prefers deterministic local resolution over cloud inference.',
@@ -204,14 +204,14 @@ export const selectedProjects: ProjectCaseStudy[] = [
     diagram: ['Tagged UI', 'Semantic Scanner', 'Application Graph', 'Intent Engine', 'DOM Dispatch'],
     technologies: ['TypeScript', 'React', 'Vite', 'Tailwind CSS', 'Fastify', 'npm workspaces', 'Web Speech API'],
     challenges: [
-      'Designing deterministic local resolution so common commands do not depend on cloud-first inference.',
-      'Modeling both rendered DOM state and not-yet-rendered routes through a hybrid graph without losing execution clarity.',
-      'Keeping the AI fallback bounded and normalized so the system behaves like a semantic runtime instead of a thin chatbot wrapper.',
+      'Getting local resolution deterministic enough that common commands never need to touch the network.',
+      'Modeling rendered DOM state and not-yet-rendered routes through the same graph without the two falling out of sync.',
+      'Keeping the AI fallback on a short leash, so the system reads as a semantic runtime and not a chatbot with extra steps.',
     ],
     outcomes: [
-      'A working monorepo — browser SDK, shared contracts package, inference fallback server, and a docs site that exercises the runtime.',
-      'An internal validation suite covering semantic scanning, graph construction, dispatch behavior, and fallback paths.',
-      'Private startup work — presented here as a case study, not as open-source; source and internal architecture are not public.',
+      'A working monorepo: browser SDK, a shared contracts package, an inference fallback server, and a docs site that runs on its own runtime.',
+      'An internal validation suite that actually exercises scanning, graph construction, dispatch, and the fallback paths.',
+      'Still private startup work. This is the case-study version — source and internal architecture stay off the public record.',
     ],
     tags: ['featured', 'ai', 'platform', 'systems'],
     demoUrl: 'https://www.usecinder.dev/',
@@ -223,9 +223,9 @@ export const selectedProjects: ProjectCaseStudy[] = [
     visibility: 'private',
     visibilityLabel: 'Private',
     summary:
-      'A guided drone-building platform that encodes real component-compatibility rules — motors, frames, ESCs, batteries — into a typed API, so invalid configurations can’t reach the user in the first place.',
+      'A drone-building tool that won’t let you pick parts that don’t fit together. Motor, frame, ESC, and battery compatibility is encoded into a typed API instead of living in someone’s head.',
     problem:
-      'Picking compatible drone components is normally trial-and-error across forums and spec sheets. ROTOR moves that logic into the stack itself instead of leaving it to the buyer.',
+      'Normally you figure out compatible drone parts by trial and error across forums and spec sheets. ROTOR puts that logic in the stack so a bad configuration can’t even reach the screen.',
     architecture: [
       'A Bun/TypeScript monorepo (Turborepo) across API, web, and a shared typed-contracts package.',
       'Fastify + Drizzle ORM + PostgreSQL + Zod for a type-safe compatibility API.',
@@ -234,14 +234,14 @@ export const selectedProjects: ProjectCaseStudy[] = [
     diagram: ['Component Catalog', 'Compatibility Engine', 'Typed Contracts', 'Guided Builder UI', 'Admin Spec Tools'],
     technologies: ['TypeScript', 'Bun', 'Turborepo', 'Fastify', 'Drizzle ORM', 'PostgreSQL', 'Zod', 'Next.js', 'Vitest'],
     challenges: [
-      'Modeling compatibility as data rather than scattered conditionals, so new component types stay addable.',
-      'Keeping validation logic shared and typed end-to-end between the API and the web client instead of duplicating it.',
-      'Documenting the architecture and open next steps clearly enough that the project is pick-up-able later.',
+      'Modeling compatibility as data instead of a pile of conditionals, so a new component type doesn’t mean touching five files.',
+      'Sharing validation logic end-to-end between the API and web client through one typed contracts package, instead of duplicating it on both sides.',
+      'Writing the architecture down well enough that picking the project back up later doesn’t mean re-deriving it from scratch.',
     ],
     outcomes: [
-      'A working compatibility engine with seed data and documented demo accounts.',
-      'A documented architecture — principles, stack, and a maintained docs index — rather than tribal knowledge.',
-      'A typed contracts package shared end-to-end between the backend and web client.',
+      'A compatibility engine that actually runs, with seed data and demo accounts documented for anyone trying it.',
+      'A docs/ folder that holds up — principles, stack, an index — instead of knowledge that only lives in my head.',
+      'One typed contracts package that the backend and frontend both build against.',
     ],
     tags: ['featured', 'platform', 'systems'],
   },
@@ -252,9 +252,9 @@ export const selectedProjects: ProjectCaseStudy[] = [
     visibility: 'private',
     visibilityLabel: 'Private',
     summary:
-      'A Jira-style internal ticket-management system — groups, tickets, subtasks, milestones, boards, and an audit log — built around a deliberately granular, testable permission model.',
+      'An internal, Jira-shaped ticketing system — groups, tickets, subtasks, boards, an audit log — built around permissions that are actually granular instead of a single admin/user switch.',
     problem:
-      'Small internal tools usually either skip access control or bolt on a single admin/user split. Campfire needed per-group, per-role permissions that could be reasoned about and verified, not just assumed.',
+      'Most internal tools skip access control or bolt on exactly one permission level. Campfire needed per-group, per-role rules that could be reasoned about, and tested, not just trusted.',
     architecture: [
       'An Express + MongoDB backend with refresh-token auth and a documented access-control model.',
       'A Next.js frontend for boards, tickets, and reporting.',
@@ -263,14 +263,14 @@ export const selectedProjects: ProjectCaseStudy[] = [
     diagram: ['Groups & Roles', 'Tickets & Subtasks', 'Boards', 'Audit Log', 'Webhooks'],
     technologies: ['TypeScript', 'Express', 'MongoDB', 'Next.js', 'Playwright', 'OpenAPI'],
     challenges: [
-      'Designing a permission model granular enough to be real, but simple enough to document and test.',
-      'Covering the access-control rules with both integration tests and Playwright end-to-end tests.',
-      'Being explicit about what is deliberately out of scope rather than letting scope creep in silently.',
+      'Making the permission model granular enough to mean something, without making it impossible to document.',
+      'Covering the access-control rules with real integration tests and Playwright end-to-end runs, not just manual poking.',
+      'Writing down what’s deliberately not built yet instead of letting the scope quietly blur.',
     ],
     outcomes: [
-      'A working ticket system with integration and end-to-end test coverage.',
-      'An explicit, documented “not included yet” list (email, attachments, 2FA) instead of implied completeness.',
-      'A granular, testable permission model instead of a single admin/user split.',
+      'A working ticket system backed by both integration and end-to-end test coverage.',
+      'A documented “not yet” list — email, attachments, 2FA — instead of a README that implies it’s all done.',
+      'A permission model that’s actually testable, not just an admin flag.',
     ],
     tags: ['featured', 'platform'],
   },
@@ -281,9 +281,9 @@ export const selectedProjects: ProjectCaseStudy[] = [
     visibility: 'private',
     visibilityLabel: 'Private',
     summary:
-      'A 2D roguelite built for 2P Game Arcade’s 1.44MB Game Development Contest — the entire game, engine, and assets must fit inside 1,474,560 bytes, the capacity of a 1.44MB floppy disk. Submitted September 2026.',
+      'A 2D roguelite built for 2P Game Arcade’s 1.44MB Game Development Contest — the whole game, engine included, has to fit in 1,474,560 bytes, the size of an actual floppy disk. Submitted September 2026.',
     problem:
-      'Modern game development assumes megabytes of runtime and asset budget are free. This project inverts that: no engine, no external libraries, software-rendered graphics, and procedurally generated content instead of shipped assets.',
+      'Game dev today assumes a budget of megabytes you don’t have to think about. This project removes that assumption entirely: no engine, no external libraries, a software-rendered framebuffer, content generated procedurally instead of shipped as assets.',
     architecture: [
       'Raw Win32 API, with no game engine or external libraries.',
       'A software-rendered framebuffer and sprite-sheet renderer written directly against it.',
@@ -292,14 +292,14 @@ export const selectedProjects: ProjectCaseStudy[] = [
     diagram: ['Win32 Window', 'Software Framebuffer', 'Procedural Content', 'Audio Synthesis', 'Build Size Budget'],
     technologies: ['C++20', 'Win32 API', 'CMake', 'Ninja / MinGW'],
     challenges: [
-      'Fitting an entire game inside a hard 1.44MB byte budget with no engine to lean on.',
-      'Generating content and audio procedurally in code instead of shipping binary assets.',
-      'Keeping the current build around a small fraction of the size budget while still adding real features.',
+      'Fitting an entire game in a hard 1.44MB cap with nothing off-the-shelf to lean on.',
+      'Generating audio and content in code instead of paying for it in bytes as binary assets.',
+      'Still shipping real features — audio, a renderer, a pause screen — while the build sits at a fraction of the budget.',
     ],
     outcomes: [
-      'A playable, actively developed roguelite currently using only a small fraction of the available size budget.',
-      'A working procedural audio engine and sprite renderer, built directly on top of the raw framebuffer.',
-      'A README that documents the exact constraint and the reasoning behind it, rather than hiding the trade-offs.',
+      'A playable, still-growing roguelite using a small slice of the available 1.44MB.',
+      'A procedural audio engine and sprite renderer, written directly on top of the raw framebuffer.',
+      'A README that states the constraint and the reasoning plainly, instead of hiding the trade-offs made to hit it.',
     ],
     tags: ['featured', 'systems'],
     imageUrl: `${import.meta.env.BASE_URL}floppyrogue-title.png`,
@@ -312,9 +312,9 @@ export const selectedProjects: ProjectCaseStudy[] = [
     visibility: 'private',
     visibilityLabel: 'Private',
     summary:
-      'A CLI that crawls a site with a real browser and runs SEO, accessibility, performance, and security checks — including CORS, header hardening, and exposure testing — producing structured reports.',
+      'A CLI that opens a real browser on a site and runs SEO, accessibility, performance, and security checks together — CORS, header hardening, and exposure testing included — and writes it all up as a structured report.',
     problem:
-      'Most site-checking tools either only look at static markup, missing anything rendered client-side, or only check one category at a time. This drives an actual browser and checks multiple categories from a single crawl.',
+      '“Check my site” tools usually either read static HTML and miss anything client-rendered, or only check one category at a time. This one drives an actual browser and checks several categories from a single crawl.',
     architecture: [
       'A Playwright-driven crawler that captures real rendered pages, not just raw HTML.',
       'A modular audit engine: SEO, accessibility, and performance checks alongside dedicated security modules for CORS, HTTP methods, SRI, email security, and exposure/hardening.',
@@ -323,14 +323,14 @@ export const selectedProjects: ProjectCaseStudy[] = [
     diagram: ['Browser Crawl', 'Audit Modules', 'Visual / AI Review (optional)', 'Report Generation'],
     technologies: ['Python', 'Playwright', 'BeautifulSoup', 'Pillow', 'dnspython', 'pytest'],
     challenges: [
-      'Keeping security checks read-only by default, with active/aggressive testing as an explicit opt-in.',
-      'Structuring audit categories as independent modules so new checks can be added without touching unrelated ones.',
-      'Covering newly added hardening and exposure-testing modules with a real, passing test suite rather than shipping them unverified.',
+      'Keeping security checks read-only by default, with anything more active gated behind an explicit flag.',
+      'Splitting audit categories into independent modules so adding a check doesn’t risk breaking an unrelated one.',
+      'Actually testing the newly added hardening and exposure modules instead of shipping them on faith.',
     ],
     outcomes: [
-      'A working CLI with an independently testable, growing set of audit modules.',
-      'A security-hardening and exposure-testing layer added and verified against a full passing test suite.',
-      'Structured JSON/HTML/PDF output suitable for sharing a report, not just console text.',
+      'A CLI with a growing set of audit modules that can each be tested on their own.',
+      'A new security-hardening and exposure layer, backed by a full passing test suite.',
+      'JSON/HTML/PDF output — something you can hand to someone, not just terminal scrollback.',
     ],
     tags: ['featured', 'systems'],
   },
@@ -341,9 +341,9 @@ export const selectedProjects: ProjectCaseStudy[] = [
     visibility: 'private',
     visibilityLabel: 'Private',
     summary:
-      'A small, self-hosted email-open tracker — issues tracking pixels, shows opens on a dashboard, and is explicit about what the data can and can’t actually prove.',
+      'A small, self-hosted email-open tracker. It shows opens on a dashboard and, unlike most tools in this category, says plainly what the data can and can’t prove.',
     problem:
-      'Open-tracking is usually either a black-box SaaS with vague privacy practices, or a naive pixel with no rate limiting, no origin checks, and raw IP logging. This is a minimal version built around the details that are usually skipped.',
+      'Open-tracking tools are usually a black-box SaaS with vague privacy practices, or a bare pixel with no rate limiting, no origin checks, and raw IPs sitting in a database. This is the version that doesn’t skip those details.',
     architecture: [
       'A Next.js (App Router) application backed by MongoDB Atlas.',
       'HMAC-hashed IPs instead of raw IP storage, with origin checks on mutating requests.',
@@ -352,14 +352,14 @@ export const selectedProjects: ProjectCaseStudy[] = [
     diagram: ['Tracking Pixel', 'Open Event', 'Rate Limit + Origin Check', 'Dashboard', 'Notification'],
     technologies: ['TypeScript', 'Next.js', 'MongoDB', 'Resend', 'Vitest'],
     challenges: [
-      'Rate limiting correctly in a serverless environment without a persistent in-memory store.',
-      'Choosing to hash IPs instead of storing them raw, as a default rather than an afterthought.',
-      'Being explicit in the product itself that open-tracking data is a signal, not proof.',
+      'Rate limiting properly in a serverless environment with no persistent process to hold state in memory.',
+      'Hashing IPs by default instead of treating it as a nice-to-have, fixed later.',
+      'Saying out loud, in the product itself, that an “open” is a signal and not proof.',
     ],
     outcomes: [
-      'A small, fully tested, deployed tool rather than a larger, unfinished one.',
-      'A documented “Limitations” section that tells users exactly how much to trust the data.',
-      'Security-conscious defaults — hashed IPs, origin checks, rate limiting — instead of the common naive implementation.',
+      'A small tool that’s actually finished and tested, instead of a bigger one that isn’t.',
+      'A “Limitations” section that tells you exactly how far to trust the numbers.',
+      'Hashed IPs, origin checks, and rate limiting as defaults, not afterthoughts.',
     ],
     tags: ['featured', 'systems'],
   },
@@ -370,9 +370,9 @@ export const selectedProjects: ProjectCaseStudy[] = [
     visibility: 'private',
     visibilityLabel: 'Private',
     summary:
-      'A strategy-game prototype about hidden networks and ideological manipulation, built around a genuinely iterated AI decision-making engine rather than a single scripted opponent.',
+      'A strategy-game prototype about hidden networks and ideological manipulation, carried by an AI engine that was actually iterated — not a single scripted opponent dressed up as “AI.”',
     problem:
-      'Game AI is often either scripted or a thin wrapper around randomness. This project iterated an actual scoring and lookahead system through more than twenty documented phases, including AI-vs-AI simulation runs used to tune balance.',
+      'Game AI tends to be either scripted or dressed-up randomness. This one got a real scoring and lookahead system, developed across more than twenty documented phases, with AI-vs-AI runs used to tune balance.',
     architecture: [
       'A React + Vite client with an Express + TypeScript server.',
       'A scoring engine evaluating actions across competing signals — trust, aggression, virality, ideology — instead of one win condition.',
@@ -381,14 +381,14 @@ export const selectedProjects: ProjectCaseStudy[] = [
     diagram: ['Game State', 'Action Scorer', 'Lookahead Simulator', 'AI-vs-AI Simulation', 'Balance Tuning'],
     technologies: ['TypeScript', 'React', 'Vite', 'Express'],
     challenges: [
-      'Scoring actions along multiple competing axes instead of a single win condition.',
-      'Using AI-vs-AI simulation runs as an actual balance-testing tool rather than relying only on manual playtesting.',
-      'Keeping the engine’s iteration systematic and documented across 20+ phases instead of ad hoc tuning.',
+      'Scoring actions across several competing signals instead of one win condition.',
+      'Using AI-vs-AI simulation as an actual balance-testing tool instead of just playtesting by hand.',
+      'Keeping 20+ phases of iteration systematic and documented instead of tuning numbers at random.',
     ],
     outcomes: [
-      'A working simulation engine with over 100 commits of systematic, phase-tracked iteration.',
-      'AI-vs-AI simulation reporting used as a real balance-testing tool.',
-      'A genuinely deep, well-iterated game-AI system rather than a surface-level demo.',
+      'A simulation engine with 100+ commits of genuinely systematic, phase-tracked work behind it.',
+      'AI-vs-AI simulation reports used as a real tool, not a demo gimmick.',
+      'A game-AI system with real depth to it, not a surface-level pass.',
     ],
     tags: ['featured', 'ai', 'systems'],
   },
@@ -399,25 +399,25 @@ export const thinkingEntries: ThinkingEntry[] = [
     title: 'Interfaces should reveal system intent',
     kind: 'Principle',
     excerpt:
-      'The best engineering interfaces make hidden complexity legible. APIs, dashboards, and internal tools should expose where control lives and where failure can happen.',
+      'A good interface makes the hidden complexity legible — an API, a dashboard, an internal tool should show you where control actually lives and where it can break.',
   },
   {
     title: 'Reliability is a product feature',
     kind: 'Architecture note',
     excerpt:
-      'Resilience work matters most when it improves operator calm and user trust. Retries, idempotency, and observability are not infrastructure theater; they shape the product experience.',
+      'Retries, idempotency, observability — none of that is infrastructure theater. It’s the difference between a user trusting the product and not.',
   },
   {
     title: 'Documentation should admit what isn’t finished',
     kind: 'Practice',
     excerpt:
-      'A README that lists known gaps alongside what works is more useful — and more credible — than one that implies everything is done.',
+      'A README with a real “known gaps” section is more useful, and more believable, than one that quietly implies everything works.',
   },
   {
     title: 'Developer tooling changes team speed structurally',
     kind: 'Tooling',
     excerpt:
-      'Internal tooling is often the quiet multiplier. When debugging, release handling, and inspection become easier, product delivery improves everywhere else.',
+      'Tooling is the quiet multiplier. Make debugging and releases less painful, and everything downstream gets faster too.',
   },
 ];
 
