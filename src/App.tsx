@@ -609,7 +609,7 @@ function App() {
       </header>
 
       <main id="top">
-        <section className="journal-shell flex min-h-[calc(100vh-76px)] items-center justify-center py-16 text-center sm:py-20">
+        <section className="journal-shell flex items-center justify-center py-20 text-center sm:py-28">
           <div className="max-w-5xl">
             <p className="hero-preface">{journalProfile.preface}</p>
             <h1 className="hero-name mt-8">{journalProfile.name}</h1>
@@ -829,7 +829,7 @@ function App() {
                         </section>
                       </div>
 
-                      <aside className="paper-panel paper-panel-strong p-6">
+                      <aside className="paper-panel paper-panel-strong flex flex-col justify-center p-6">
                         {project.imageUrl ? (
                           <img
                             src={project.imageUrl}
