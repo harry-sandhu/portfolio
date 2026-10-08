@@ -304,10 +304,6 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'A README that states the constraint and the reasoning plainly, instead of hiding the trade-offs made to hit it.',
     ],
     tags: ['featured', 'systems'],
-    imageUrl: `${import.meta.env.BASE_URL}floppyrogue-title.png`,
-    imageAlt: 'FloppyRogue title card',
-    imageWidth: 148,
-    imageHeight: 74,
   },
   {
     name: 'website-auditor',
