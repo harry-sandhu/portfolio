@@ -69,11 +69,20 @@ export type ThinkingEntry = {
   excerpt: string;
 };
 
+export type BuildEntry = {
+  title: string;
+  event: string;
+  window: string;
+  angle: string;
+  evidence: string[];
+};
+
 export const chapterLinks: ChapterLink[] = [
   { id: 'who-i-am', number: '01', title: 'Who I Am' },
   { id: 'experience', number: '02', title: 'Experience' },
   { id: 'selected-projects', number: '03', title: 'Projects' },
-  { id: 'thinking', number: '04', title: 'Thinking' },
+  { id: 'building', number: '04', title: 'Hackathons & Building' },
+  { id: 'thinking', number: '05', title: 'Thinking' },
 ];
 
 export const journalProfile: JournalProfile = {
@@ -391,6 +400,51 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'A game-AI system with real depth to it, not a surface-level pass.',
     ],
     tags: ['featured', 'ai', 'systems'],
+  },
+];
+
+export const buildingEntries: BuildEntry[] = [
+  {
+    title: 'Haithe',
+    event: 'Metis HyperHack 2024',
+    window: 'Team project',
+    angle: 'Backend and wallet-identity work: Sign-In with Ethereum, JWT auth, and EVM tooling built with Bun, Hono, and Drizzle ORM.',
+    evidence: ['Tier 3 winner ($500).', 'Still a real, active project: github.com/hetairoi-labs/haithe'],
+  },
+  {
+    title: 'Nest',
+    event: 'Avalanche Frontier Hackathon 2024',
+    window: 'Team project, two developers',
+    angle: 'Backend and Solidity development.',
+    evidence: ['Won, among 150+ projects.'],
+  },
+  {
+    title: 'JustInsure',
+    event: 'HackaTRON Season 7, 2024',
+    window: 'Team project (“The Aresians”)',
+    angle: 'Backend API tooling and smart-contract development.',
+    evidence: ['3rd place, DeFi Track, among 1,300+ participants.'],
+  },
+  {
+    title: 'AgroSurance',
+    event: 'Chainlink Spring Hackathon 2023',
+    window: 'Team project',
+    angle: 'Debugging support and tooling assistance.',
+    evidence: ['2nd place, Tech for Good category, $5,000.'],
+  },
+  {
+    title: 'Echo',
+    event: 'Open Campus EduChain Hackathon 2024',
+    window: 'Team project',
+    angle: 'Infrastructure design and backend development.',
+    evidence: ['Built during a hackathon series that drew 4,500+ participants.'],
+  },
+  {
+    title: 'PumpFaxt',
+    event: 'Fraxtal Hackathon',
+    window: 'Team project',
+    angle: 'Smart contracts and testing.',
+    evidence: ['Built as part of a team hackathon submission.'],
   },
 ];
 

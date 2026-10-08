@@ -11,6 +11,7 @@ import {
 import {
   aboutNarrative,
   aboutPillars,
+  buildingEntries,
   chapterLinks,
   chapterMetrics,
   devModeSamples,
@@ -62,6 +63,7 @@ const terminalCommandCatalog: TerminalCommandDefinition[] = [
   { command: 'experience', description: 'Inspect the experience timeline.' },
   { command: 'stack', description: 'See the current working stack.' },
   { command: 'thinking', description: 'Open principles, notes, and engineering ideas.' },
+  { command: 'building', description: 'Review hackathon and team-build work.' },
   { command: 'contact', description: 'Show contact links and location.' },
   { command: 'history', description: 'Print the locally saved command history.' },
   { command: 'clear', description: 'Clear the terminal output.' },
@@ -167,7 +169,7 @@ function createInitialTerminalEntries(): TerminalEntry[] {
       prompt: 'init',
       result: [
         'Dev indexes the portfolio like a systems console.',
-        'Ask about projects, experience, architecture, stack, thinking, or contact.',
+        'Ask about projects, experience, architecture, stack, thinking, building, or contact.',
         'Keyboard: Tab autocomplete · ↑ ↓ history · Esc return to UI.',
         `Try: ${devModeSamples.join(' · ')}`,
       ].join('\n'),
@@ -196,6 +198,7 @@ function resolveDevCommand(rawCommand: string, commandHistory: string[] = []): C
         'experience',
         'stack',
         'thinking',
+        'building',
         'contact',
         'history',
         'clear',
@@ -264,6 +267,15 @@ function resolveDevCommand(rawCommand: string, commandHistory: string[] = []): C
       type: 'append',
       result: thinkingEntries
         .map((entry) => `${entry.title} · ${entry.kind}\n${entry.excerpt}`)
+        .join('\n\n'),
+    };
+  }
+
+  if (normalized === 'building' || normalized === 'hackathons') {
+    return {
+      type: 'append',
+      result: buildingEntries
+        .map((entry) => `${entry.title} · ${entry.event}\n${entry.window}\n${entry.angle}\n${formatList(entry.evidence)}`)
         .join('\n\n'),
     };
   }
@@ -619,7 +631,7 @@ function App() {
             <div className="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-[0.74rem] uppercase tracking-[0.22em] text-[rgba(102,54,53,0.58)]">
               <span>{journalProfile.location}</span>
               <span>Backend / Systems</span>
-              <span>Four chapters</span>
+              <span>Five chapters</span>
             </div>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-2 md:hidden">
@@ -905,8 +917,61 @@ function App() {
         </div>
 
         <ChapterPreview
-          id="thinking"
+          id="building"
           number="04"
+          title="Hackathons & Building"
+          lead="Team builds under time pressure. I wasn't always the sole architect. Here's what I actually worked on and what each team shipped."
+        >
+          <div className="grid gap-10 xl:grid-cols-[0.85fr_1.15fr]">
+            <div className="space-y-5">
+              <p>
+                These were all team efforts. The value here isn&rsquo;t a solo-genius story. It&rsquo;s evidence of working inside a
+                small team, under a deadline, on an unfamiliar stack, and still shipping something that worked well enough to place.
+              </p>
+
+              <section className="paper-panel p-6">
+                <p className="detail-label">What this chapter signals</p>
+                <ul className="technical-list mt-4">
+                  <li>
+                    <span>Comfort picking up a technical role fast inside someone else&rsquo;s codebase and team structure.</span>
+                  </li>
+                  <li>
+                    <span>Repeated exposure to smart-contract, backend, and infrastructure work across different teams and stacks.</span>
+                  </li>
+                  <li>
+                    <span>A pattern of actually shipping, not just entering.</span>
+                  </li>
+                </ul>
+              </section>
+            </div>
+
+            <div className="building-grid">
+              {buildingEntries.map((entry) => (
+                <article key={entry.title} className="paper-panel p-6">
+                  <p className="detail-label">{entry.event}</p>
+                  <h3 className="mt-3 font-[var(--journal-serif)] text-3xl text-[var(--journal-ink)]">{entry.title}</h3>
+                  <p className="mt-2 text-sm uppercase tracking-[0.18em] text-[rgba(102,54,53,0.58)]">{entry.window}</p>
+                  <p className="mt-5 text-[rgba(102,54,53,0.82)]">{entry.angle}</p>
+                  <ul className="technical-list mt-5">
+                    {entry.evidence.map((item) => (
+                      <li key={item}>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </div>
+        </ChapterPreview>
+
+        <div className="journal-shell py-3">
+          <div className="journal-rule" />
+        </div>
+
+        <ChapterPreview
+          id="thinking"
+          number="05"
           title="Thinking"
           lead="Ideas, engineering principles, architecture notes, and the quieter observations that shape how systems are built."
         >
