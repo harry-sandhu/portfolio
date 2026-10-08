@@ -31,22 +31,15 @@ export type ExperienceEntry = {
   systems: string[];
 };
 
-export type ProjectTagId =
-  | 'featured'
-  | 'ai'
-  | 'realtime'
-  | 'platform'
-  | 'systems'
-  | 'fintech'
-  | 'web3'
-  | 'education'
-  | 'agritech';
+export type ProjectTagId = 'featured' | 'ai' | 'platform' | 'systems';
 
 export type ProjectTag = {
   id: ProjectTagId;
   label: string;
   description: string;
 };
+
+export type ProjectVisibility = 'private-startup' | 'private';
 
 export type ProjectCaseStudy = {
   name: string;
@@ -60,14 +53,10 @@ export type ProjectCaseStudy = {
   challenges: string[];
   outcomes: string[];
   tags: ProjectTagId[];
-};
-
-export type BuildEntry = {
-  title: string;
-  event: string;
-  window: string;
-  angle: string;
-  evidence: string[];
+  visibility: ProjectVisibility;
+  visibilityLabel: string;
+  githubUrl?: string;
+  demoUrl?: string;
 };
 
 export type ThinkingEntry = {
@@ -80,14 +69,13 @@ export const chapterLinks: ChapterLink[] = [
   { id: 'who-i-am', number: '01', title: 'Who I Am' },
   { id: 'experience', number: '02', title: 'Experience' },
   { id: 'selected-projects', number: '03', title: 'Projects' },
-  { id: 'building', number: '04', title: 'Hackathons & Building' },
-  { id: 'thinking', number: '05', title: 'Thinking' },
+  { id: 'thinking', number: '04', title: 'Thinking' },
 ];
 
 export const journalProfile: JournalProfile = {
   name: 'Harry Sandhu',
   role: 'Software Engineer',
-  supportLine: 'Backend Systems, Applied AI, Realtime Platforms, Developer Tooling',
+  supportLine: 'Backend Systems, Full-Stack Delivery, Developer Tooling',
   preface: 'A technical journal of systems, products, and engineering decisions.',
   location: 'Mumbai, India',
   email: 'singh.harcharan2003@gmail.com',
@@ -97,34 +85,34 @@ export const journalProfile: JournalProfile = {
 };
 
 export const aboutNarrative = [
-  'Harry Sandhu is an engineer focused on backend systems, distributed architectures, AI infrastructure, developer tooling, realtime systems, and product engineering.',
+  'Harry Sandhu is an engineer focused on backend systems, full-stack delivery, and developer tooling.',
   'His work sits at the intersection of reliability and velocity: building services that are operationally calm, technically legible, and ready for production constraints.',
-  'Across startups, enterprise systems, and fast-moving prototypes, the through-line is the same: clear architecture, strong ownership, and software that continues to hold together after launch.',
+  'Across startups, enterprise systems, and self-directed projects, the through-line is the same: clear architecture, strong ownership, and documentation that tells the truth about what is and isn’t finished.',
 ];
 
 export const aboutPillars: AboutPillar[] = [
   {
     title: 'Backend Systems',
-    body: 'Service boundaries, APIs, queues, storage workflows, resilience, and operational correctness.',
+    body: 'Service boundaries, typed APIs, queues, storage workflows, and operational correctness.',
   },
   {
-    title: 'Applied AI',
-    body: 'Retrieval pipelines, agents, evaluation loops, observability, and product-aware AI infrastructure.',
-  },
-  {
-    title: 'Realtime Platforms',
-    body: 'Presence, event streams, synchronization, and systems that must remain responsive under change.',
+    title: 'Full-Stack Delivery',
+    body: 'Shipping both sides of a product — React/Next.js frontends paired with backends that hold up under real use.',
   },
   {
     title: 'Developer Tooling',
-    body: 'Interfaces and internal systems that reduce friction for teams shipping quickly and repeatedly.',
+    body: 'Internal tools, CLIs, and runtimes that reduce friction for whoever uses them next, including future me.',
+  },
+  {
+    title: 'Systems Thinking',
+    body: 'Treating constraints — a size budget, a permission model, a compatibility rule — as the design problem itself.',
   },
 ];
 
 export const chapterMetrics = [
-  { label: 'Production users', value: '30k+' },
-  { label: 'Enterprise workflow effort reduced', value: '30%' },
-  { label: 'Primary focus', value: 'Systems + AI' },
+  { label: 'Primary focus', value: 'Backend & Systems' },
+  { label: 'Also ships', value: 'Full-stack products' },
+  { label: 'Currently exploring', value: 'Developer tooling + AI' },
 ];
 
 export const experienceJourney: ExperienceEntry[] = [
@@ -151,7 +139,7 @@ export const experienceJourney: ExperienceEntry[] = [
       'Worked inside enterprise delivery environments, improving workflow automation, deployment quality, and backend reliability for CRM-adjacent systems.',
     focus: [
       'Built validation tooling, backend services, dashboards, and operational workflows for enterprise teams.',
-      'Implemented CI/CD and release improvements that reduced manual effort by 30%.',
+      'Worked on CI/CD and release-process improvements for enterprise delivery pipelines.',
       'Improved production debugging, visibility, and repeatability across system changes and deployments.',
     ],
     systems: ['Automation', 'CI/CD', 'Validation tooling', 'Operational dashboards', 'Enterprise workflows'],
@@ -176,47 +164,22 @@ export const projectTags: ProjectTag[] = [
   {
     id: 'featured',
     label: 'Featured',
-    description: 'The clearest signal projects: flagship work across architecture, AI, product systems, and operational depth.',
+    description: 'A deliberately small set of case studies, chosen for the engineering story rather than the tech-stack size.',
   },
   {
     id: 'ai',
-    label: 'AI Systems',
-    description: 'Retrieval, recommendations, agents, evaluation loops, and AI infrastructure built as real product systems.',
-  },
-  {
-    id: 'realtime',
-    label: 'Realtime',
-    description: 'Presence, multiplayer state, collaboration, and low-latency delivery where ordering and trust matter.',
+    label: 'AI / Simulation',
+    description: 'Runtimes, scoring engines, and decision systems built as real systems rather than prompt wrappers.',
   },
   {
     id: 'platform',
-    label: 'Platform Ops',
-    description: 'Backoffice tooling, workflow orchestration, operator visibility, and backend systems that support live operations.',
+    label: 'Platform',
+    description: 'Backend platforms and internal tools with typed APIs, access control, and operational thinking.',
   },
   {
     id: 'systems',
-    label: 'Systems Design',
-    description: 'Runtime boundaries, distributed workers, orchestration layers, and architecture decisions under real constraints.',
-  },
-  {
-    id: 'fintech',
-    label: 'Fintech',
-    description: 'Ledgers, money movement, lending workflows, audit trails, and operational trust in financial systems.',
-  },
-  {
-    id: 'web3',
-    label: 'Web3',
-    description: 'Wallet-connected flows, blockchain integrations, treasury operations, and decentralized product surfaces.',
-  },
-  {
-    id: 'education',
-    label: 'Education',
-    description: 'Learning systems, recommendations, retrieval-backed knowledge delivery, and adaptive user flows.',
-  },
-  {
-    id: 'agritech',
-    label: 'Agritech',
-    description: 'Farm operations, agricultural intelligence, field data processing, and product workflows for real users.',
+    label: 'Systems',
+    description: 'Projects where the constraint — size, performance, correctness — is the actual design problem.',
   },
 ];
 
@@ -225,309 +188,204 @@ export const selectedProjects: ProjectCaseStudy[] = [
     name: 'Cinder',
     label: 'Semantic runtime / browser SDK',
     year: '2026',
+    visibility: 'private-startup',
+    visibilityLabel: 'Private Startup Project',
     summary:
       'A browser-first semantic runtime that turns tagged web application UI into a graph-aware command layer, resolving voice and text commands locally against the DOM before using optional fallback inference.',
     problem:
-      'Supporting commands like “open reports”, “save changes”, or “filter by district” usually forces teams to stitch together speech recognition, intent parsing, context handling, action dispatch, and AI fallback as separate systems. Cinder was built to package that into one local-first runtime.',
+      'Supporting commands like “open reports”, “save changes”, or “filter by district” usually forces teams to stitch together speech recognition, intent parsing, context handling, action dispatch, and AI fallback as separate systems. Cinder packages that into one local-first runtime.',
     architecture: [
-      'A semantic scanner reads tagged UI elements, extracts metadata from the DOM, and builds a route/context-aware application graph of actions, fields, filters, outputs, and data nodes.',
-      'A graph query and intent layer normalizes text or speech input, prefers deterministic local planners, and uses a hybrid hot/cold graph so known routes can be reasoned about even before they are rendered.',
-      'A DOM-native dispatcher executes the resolved command against the real interface, while a Fastify fallback service returns normalized structured intents only when local confidence is weak.',
+      'A semantic scanner reads tagged UI elements and builds a route/context-aware application graph of actions, fields, filters, and data nodes.',
+      'A graph query and intent layer normalizes text or speech input and prefers deterministic local resolution over cloud inference.',
+      'A DOM-native dispatcher executes the resolved command against the real interface, with an optional fallback service used only when local confidence is weak.',
     ],
     diagram: ['Tagged UI', 'Semantic Scanner', 'Application Graph', 'Intent Engine', 'DOM Dispatch'],
-    technologies: ['TypeScript', 'React', 'Vite', 'Tailwind CSS', 'MDX', 'Fastify', 'npm workspaces', 'Web Speech API'],
+    technologies: ['TypeScript', 'React', 'Vite', 'Tailwind CSS', 'Fastify', 'npm workspaces', 'Web Speech API'],
     challenges: [
-      'Designing deterministic local resolution so common commands did not depend on cloud-first inference.',
-      'Modeling both rendered DOM state and non-rendered routes through a hybrid hot/cold graph without losing execution clarity.',
-      'Keeping fallback bounded and normalized so the product behaved like a semantic runtime instead of a thin chatbot wrapper.',
+      'Designing deterministic local resolution so common commands do not depend on cloud-first inference.',
+      'Modeling both rendered DOM state and not-yet-rendered routes through a hybrid graph without losing execution clarity.',
+      'Keeping the AI fallback bounded and normalized so the system behaves like a semantic runtime instead of a thin chatbot wrapper.',
     ],
     outcomes: [
-      'Built a working monorepo with a browser SDK, shared contracts package, Fastify inference server, and a React/Vite/Tailwind/MDX docs site that dogfoods the runtime.',
-      'Validated semantic scanning, graph construction, route-aware resolution, dispatch behavior, speech unsupported-path handling, and fallback flows through the MVP validation suite.',
-      'Framed commandable web interfaces as an application-graph problem, creating a stronger systems foundation than prompt-only orchestration.',
+      'A working monorepo — browser SDK, shared contracts package, inference fallback server, and a docs site that exercises the runtime.',
+      'An internal validation suite covering semantic scanning, graph construction, dispatch behavior, and fallback paths.',
+      'Private startup work — presented here as a case study, not as open-source; source and internal architecture are not public.',
     ],
     tags: ['featured', 'ai', 'platform', 'systems'],
   },
   {
-    name: 'Beacon',
-    label: 'Realtime collaboration',
-    year: '2025',
+    name: 'ROTOR',
+    label: 'Compatibility-first drone platform',
+    year: '2026',
+    visibility: 'private',
+    visibilityLabel: 'Private',
     summary:
-      'A collaborative, AI-assisted workspace designed around low-latency presence, session state synchronization, and event-driven orchestration.',
+      'A guided drone-building platform that encodes real component-compatibility rules — motors, frames, ESCs, batteries — into a typed API, so invalid configurations can’t reach the user in the first place.',
     problem:
-      'Collaboration products often feel fast in demos but collapse under concurrent editing, background processing, and long-lived sessions. Beacon was designed to make collaboration operationally trustworthy.',
+      'Picking compatible drone components is normally trial-and-error across forums and spec sheets. ROTOR moves that logic into the stack itself instead of leaving it to the buyer.',
     architecture: [
-      'Session clients streamed intent and presence updates into a sync gateway responsible for ordering and fan-out.',
-      'Background workers handled AI enrichments, transcript processing, and deferred tasks without blocking active sessions.',
-      'Operational traces and activity streams made it possible to debug user-visible sync issues from event history.',
+      'A Bun/TypeScript monorepo (Turborepo) across API, web, and a shared typed-contracts package.',
+      'Fastify + Drizzle ORM + PostgreSQL + Zod for a type-safe compatibility API.',
+      'A Next.js guided builder with seeded demo data and admin tooling for managing products and specs.',
     ],
-    diagram: ['Client Sessions', 'Sync Gateway', 'Presence Store', 'Worker Mesh', 'AI Tools'],
-    technologies: ['React', 'FastAPI', 'Node.js', 'GraphQL', 'Redis', 'WebSockets'],
+    diagram: ['Component Catalog', 'Compatibility Engine', 'Typed Contracts', 'Guided Builder UI', 'Admin Spec Tools'],
+    technologies: ['TypeScript', 'Bun', 'Turborepo', 'Fastify', 'Drizzle ORM', 'PostgreSQL', 'Zod', 'Next.js', 'Vitest'],
     challenges: [
-      'Maintaining coherent state across concurrent participants.',
-      'Separating user-facing latency from asynchronous AI work.',
-      'Making realtime failures debuggable without guesswork.',
+      'Modeling compatibility as data rather than scattered conditionals, so new component types stay addable.',
+      'Keeping validation logic shared and typed end-to-end between the API and the web client instead of duplicating it.',
+      'Documenting the architecture and open next steps clearly enough that the project is pick-up-able later.',
     ],
     outcomes: [
-      'Created a stable foundation for presence, activity streams, and collaborative workflows.',
-      'Improved confidence in session recovery and observability during active usage.',
+      'A working compatibility engine with seed data and documented demo accounts.',
+      'A documented architecture — principles, stack, and a maintained docs index — rather than tribal knowledge.',
+      'A typed contracts package shared end-to-end between the backend and web client.',
     ],
-    tags: ['featured', 'ai', 'realtime', 'systems'],
+    tags: ['featured', 'platform', 'systems'],
   },
   {
-    name: 'Atlas',
-    label: 'Knowledge infrastructure',
-    year: '2025',
+    name: 'Campfire',
+    label: 'Internal ticketing system',
+    year: '2026',
+    visibility: 'private',
+    visibilityLabel: 'Private',
     summary:
-      'A retrieval and reasoning platform for document-heavy workflows, designed as infrastructure rather than a thin LLM wrapper.',
+      'A Jira-style internal ticket-management system — groups, tickets, subtasks, milestones, boards, and an audit log — built around a deliberately granular, testable permission model.',
     problem:
-      'Teams needed more than chat over documents; they needed ingestion, retrieval, grounding, evaluation, and system visibility that could hold up in production.',
+      'Small internal tools usually either skip access control or bolt on a single admin/user split. Campfire needed per-group, per-role permissions that could be reasoned about and verified, not just assumed.',
     architecture: [
-      'Document pipelines handled ingestion, chunking, metadata normalization, and retrieval indexing.',
-      'Hybrid search combined structured retrieval, semantic ranking, and citation-aware answer assembly.',
-      'Evaluation loops and instrumentation closed the gap between prototype behavior and production reliability.',
+      'An Express + MongoDB backend with refresh-token auth and a documented access-control model.',
+      'A Next.js frontend for boards, tickets, and reporting.',
+      'An OpenAPI reference endpoint documenting the API surface, plus webhook support for external integrations.',
     ],
-    diagram: ['Ingestion', 'Indexing', 'Retrieval', 'Reranking', 'Answer Layer'],
-    technologies: ['FastAPI', 'PostgreSQL', 'Redis', 'pgvector', 'React'],
+    diagram: ['Groups & Roles', 'Tickets & Subtasks', 'Boards', 'Audit Log', 'Webhooks'],
+    technologies: ['TypeScript', 'Express', 'MongoDB', 'Next.js', 'Playwright', 'OpenAPI'],
     challenges: [
-      'Balancing retrieval quality, latency, and explainability.',
-      'Creating an architecture that could evolve as prompts, models, and ranking strategies changed.',
-      'Surfacing failures early through evaluation and traceability.',
+      'Designing a permission model granular enough to be real, but simple enough to document and test.',
+      'Covering the access-control rules with both integration tests and Playwright end-to-end tests.',
+      'Being explicit about what is deliberately out of scope rather than letting scope creep in silently.',
     ],
     outcomes: [
-      'Turned AI functionality into an inspectable product system rather than a black box.',
-      'Established reusable infrastructure for search, answer generation, and evaluation.',
+      'A working ticket system with integration and end-to-end test coverage.',
+      'An explicit, documented “not included yet” list (email, attachments, 2FA) instead of implied completeness.',
+      'A granular, testable permission model instead of a single admin/user split.',
     ],
-    tags: ['featured', 'ai', 'platform'],
+    tags: ['featured', 'platform'],
   },
   {
-    name: 'Noble',
-    label: 'Wallet and operations platform',
-    year: '2024',
+    name: 'FloppyRogue',
+    label: '1.44MB game engine from scratch',
+    year: '2026',
+    visibility: 'private',
+    visibilityLabel: 'Private',
     summary:
-      'A financial operations and gaming backend where realtime state, ledgers, and operator trust all mattered at once.',
+      'A 2D roguelite built for a size-constrained game-dev contest — the entire game, engine, and assets must fit inside 1,474,560 bytes, the capacity of a 1.44MB floppy disk.',
     problem:
-      'Wallet-connected experiences require more than front-end interaction. They need backend guarantees, operator tooling, ledger visibility, and state transitions that users can trust.',
+      'Modern game development assumes megabytes of runtime and asset budget are free. This project inverts that: no engine, no external libraries, software-rendered graphics, and procedurally generated content instead of shipped assets.',
     architecture: [
-      'Backend services managed wallets, treasury actions, ledgers, and synchronized user-facing state.',
-      'Admin tooling exposed withdrawals, queue states, and audit trails for operational review.',
-      'Realtime channels kept participants aligned while preserving backend control over critical flows.',
+      'Raw Win32 API, with no game engine or external libraries.',
+      'A software-rendered framebuffer and sprite-sheet renderer written directly against it.',
+      'Procedurally generated terrain, dungeons, and enemy encounters, plus a synthesized audio engine (waveOut-based SFX, MCI-based looping music).',
     ],
-    diagram: ['Wallet Layer', 'Ledger Core', 'Ops Console', 'State Sync', 'Treasury Queue'],
-    technologies: ['Next.js', 'FastAPI', 'Redis', 'SQLite', 'Solana'],
+    diagram: ['Win32 Window', 'Software Framebuffer', 'Procedural Content', 'Audio Synthesis', 'Build Size Budget'],
+    technologies: ['C++20', 'Win32 API', 'CMake', 'Ninja / MinGW'],
     challenges: [
-      'Maintaining consistency between ledger actions and live user state.',
-      'Building operator visibility into asynchronous financial flows.',
-      'Reducing ambiguity around audits and irreversible actions.',
+      'Fitting an entire game inside a hard 1.44MB byte budget with no engine to lean on.',
+      'Generating content and audio procedurally in code instead of shipping binary assets.',
+      'Keeping the current build around a small fraction of the size budget while still adding real features.',
     ],
     outcomes: [
-      'Produced a backend architecture that supported both product speed and operational trust.',
-      'Made financial flows inspectable for both users and internal operators.',
-    ],
-    tags: ['featured', 'realtime', 'platform', 'fintech', 'web3'],
-  },
-  {
-    name: 'Kairos',
-    label: 'Runtime architecture study',
-    year: '2024',
-    summary:
-      'A systems-oriented exploration into modular runtime behavior, deterministic execution, and plugin-friendly architecture.',
-    problem:
-      'Many extensible systems become difficult to reason about once plugins, configuration, and runtime scheduling begin to interact. Kairos focused on making those boundaries clearer.',
-    architecture: [
-      'Runtime modules were separated around lifecycle hooks, execution ownership, and extension loading.',
-      'Configuration and plugin boundaries were treated as explicit contracts rather than implicit conventions.',
-      'Native performance concerns were balanced with developer ergonomics and debuggability.',
-    ],
-    diagram: ['Core Runtime', 'Plugin API', 'Scheduler', 'Config Layer', 'Diagnostics'],
-    technologies: ['C', 'C++', 'Build Tooling', 'Plugin Systems', 'Runtime Diagnostics'],
-    challenges: [
-      'Avoiding fragile coupling between plugin behavior and core execution.',
-      'Keeping low-level control without making iteration painful.',
-      'Preserving determinism while adding extensibility.',
-    ],
-    outcomes: [
-      'Clarified how systems-level interfaces can remain extensible without becoming opaque.',
-      'Strengthened judgment around runtime boundaries and developer-facing architecture.',
+      'A playable, actively developed roguelite currently using only a small fraction of the available size budget.',
+      'A working procedural audio engine and sprite renderer, built directly on top of the raw framebuffer.',
+      'A README that documents the exact constraint and the reasoning behind it, rather than hiding the trade-offs.',
     ],
     tags: ['featured', 'systems'],
   },
   {
-    name: 'Pantha',
-    label: 'Adaptive learning system',
-    year: '2025',
+    name: 'website-auditor',
+    label: 'Website security & quality auditor',
+    year: '2026',
+    visibility: 'private',
+    visibilityLabel: 'Private',
     summary:
-      'A learning platform structured around retrieval, recommendations, and fast delivery of context-aware educational flows.',
+      'A CLI that crawls a site with a real browser and runs SEO, accessibility, performance, and security checks — including CORS, header hardening, and exposure testing — producing structured reports.',
     problem:
-      'Learning products often store content well but fail to adapt retrieval, pacing, and recommendations to the actual user context. Pantha aimed to make the backend genuinely adaptive.',
+      'Most site-checking tools either only look at static markup, missing anything rendered client-side, or only check one category at a time. This drives an actual browser and checks multiple categories from a single crawl.',
     architecture: [
-      'Content pipelines generated embeddings, semantic indexes, and recommendation primitives.',
-      'Retrieval services handled relevance, fallback behavior, and response streaming for low-latency delivery.',
-      'Recommendation and agent layers translated system knowledge into user-specific paths and interventions.',
+      'A Playwright-driven crawler that captures real rendered pages, not just raw HTML.',
+      'A modular audit engine: SEO, accessibility, and performance checks alongside dedicated security modules for CORS, HTTP methods, SRI, email security, and exposure/hardening.',
+      'An optional visual/layout audit with an AI-assisted design review, plus JSON/HTML/PDF report output.',
     ],
-    diagram: ['Content Base', 'Embedding Pipeline', 'Retrieval Service', 'Recommendation Engine', 'Learner Flow'],
-    technologies: ['Embeddings', 'Vector Retrieval', 'Redis', 'SSE', 'Recommendation Systems'],
+    diagram: ['Browser Crawl', 'Audit Modules', 'Visual / AI Review (optional)', 'Report Generation'],
+    technologies: ['Python', 'Playwright', 'BeautifulSoup', 'Pillow', 'dnspython', 'pytest'],
     challenges: [
-      'Combining adaptive behavior with predictable delivery speed.',
-      'Designing retrieval that remained useful across varied learner intent.',
-      'Making AI assistance support pedagogy instead of distract from it.',
+      'Keeping security checks read-only by default, with active/aggressive testing as an explicit opt-in.',
+      'Structuring audit categories as independent modules so new checks can be added without touching unrelated ones.',
+      'Covering newly added hardening and exposure-testing modules with a real, passing test suite rather than shipping them unverified.',
     ],
     outcomes: [
-      'Created a stronger backend basis for adaptive learning experiences.',
-      'Linked retrieval, recommendations, and low-latency delivery into one coherent system.',
+      'A working CLI with an independently testable, growing set of audit modules.',
+      'A security-hardening and exposure-testing layer added and verified against a full passing test suite.',
+      'Structured JSON/HTML/PDF output suitable for sharing a report, not just console text.',
     ],
-    tags: ['featured', 'ai', 'education'],
+    tags: ['featured', 'systems'],
   },
   {
-    name: 'Hectare',
-    label: 'Agritech intelligence',
-    year: '2024',
+    name: 'EmailTracker',
+    label: 'Privacy-conscious email open tracker',
+    year: '2026',
+    visibility: 'private',
+    visibilityLabel: 'Private',
     summary:
-      'A multimodal agricultural intelligence system combining farm signals, model outputs, and operator workflows into one usable product surface.',
+      'A small, self-hosted email-open tracker — issues tracking pixels, shows opens on a dashboard, and is explicit about what the data can and can’t actually prove.',
     problem:
-      'Agricultural recommendations are only useful when imagery, weather, field data, and agronomy signals can be turned into practical decisions for both farmers and internal teams.',
+      'Open-tracking is usually either a black-box SaaS with vague privacy practices, or a naive pixel with no rate limiting, no origin checks, and raw IP logging. This is a minimal version built around the details that are usually skipped.',
     architecture: [
-      'Data pipelines normalized imagery, telemetry, weather inputs, and field reports into a common feature layer.',
-      'Inference services translated multimodal signals into disease, nutrient, and intervention recommendations.',
-      'Dashboards and advisory interfaces surfaced results in forms operators could inspect and act on quickly.',
+      'A Next.js (App Router) application backed by MongoDB Atlas.',
+      'HMAC-hashed IPs instead of raw IP storage, with origin checks on mutating requests.',
+      'Rate limiting designed for a serverless deployment, plus Resend integration for first-open notifications.',
     ],
-    diagram: ['Field Signals', 'Feature Pipeline', 'Inference Layer', 'Ops Dashboard', 'Advisory Engine'],
-    technologies: ['Python', 'FastAPI', 'React', 'Computer Vision', 'Azure', 'AWS'],
+    diagram: ['Tracking Pixel', 'Open Event', 'Rate Limit + Origin Check', 'Dashboard', 'Notification'],
+    technologies: ['TypeScript', 'Next.js', 'MongoDB', 'Resend', 'Vitest'],
     challenges: [
-      'Combining heterogeneous data sources without losing traceability.',
-      'Turning model output into workflows real operators could trust.',
-      'Balancing experimentation with production delivery constraints.',
+      'Rate limiting correctly in a serverless environment without a persistent in-memory store.',
+      'Choosing to hash IPs instead of storing them raw, as a default rather than an afterthought.',
+      'Being explicit in the product itself that open-tracking data is a signal, not proof.',
     ],
     outcomes: [
-      'Established a stronger base for AI-assisted agricultural decisions and field-level monitoring.',
-      'Reported disease-detection performance reaching up to 98% in multimodal evaluation workflows.',
+      'A small, fully tested, deployed tool rather than a larger, unfinished one.',
+      'A documented “Limitations” section that tells users exactly how much to trust the data.',
+      'Security-conscious defaults — hashed IPs, origin checks, rate limiting — instead of the common naive implementation.',
     ],
-    tags: ['ai', 'platform', 'agritech'],
+    tags: ['featured', 'systems'],
   },
   {
-    name: 'CreditKuber',
-    label: 'Lending operations platform',
-    year: '2024',
+    name: 'The Last Incentive',
+    label: 'AI strategy simulation',
+    year: '2026',
+    visibility: 'private',
+    visibilityLabel: 'Private',
     summary:
-      'An AI-assisted lending and workflow platform built around onboarding, risk support, repayment operations, and audit-ready internal tooling.',
+      'A strategy-game prototype about hidden networks and ideological manipulation, built around a genuinely iterated AI decision-making engine rather than a single scripted opponent.',
     problem:
-      'Lending teams need far more than application forms. They need backend control over underwriting, collections, reporting, access control, and operator visibility.',
+      'Game AI is often either scripted or a thin wrapper around randomness. This project iterated an actual scoring and lookahead system through more than twenty documented phases, including AI-vs-AI simulation runs used to tune balance.',
     architecture: [
-      'Workflow services handled onboarding, underwriting support, repayment stages, and collection operations.',
-      'Background jobs processed notifications, risk signals, and reporting workflows without blocking operator activity.',
-      'RBAC-aware admin tooling exposed audit trails, exceptions, and operational state across the lending lifecycle.',
+      'A React + Vite client with an Express + TypeScript server.',
+      'A scoring engine evaluating actions across competing signals — trust, aggression, virality, ideology — instead of one win condition.',
+      'A lookahead simulator used both for AI decision-making and for AI-vs-AI balance testing, developed across a long, phase-tracked commit history.',
     ],
-    diagram: ['Applicant Flow', 'Risk Engine', 'Ops Console', 'Background Jobs', 'Reporting'],
-    technologies: ['React', 'Node.js', 'PostgreSQL', 'RBAC', 'Background Jobs'],
+    diagram: ['Game State', 'Action Scorer', 'Lookahead Simulator', 'AI-vs-AI Simulation', 'Balance Tuning'],
+    technologies: ['TypeScript', 'React', 'Vite', 'Express'],
     challenges: [
-      'Keeping workflow state and operator visibility aligned across long-running financial flows.',
-      'Designing internal tooling that supported exceptions instead of only ideal happy paths.',
-      'Maintaining product speed while preserving compliance-oriented auditability.',
+      'Scoring actions along multiple competing axes instead of a single win condition.',
+      'Using AI-vs-AI simulation runs as an actual balance-testing tool rather than relying only on manual playtesting.',
+      'Keeping the engine’s iteration systematic and documented across 20+ phases instead of ad hoc tuning.',
     ],
     outcomes: [
-      'Created a more inspectable operational platform for lending workflows and internal teams.',
-      'Strengthened judgment around workflow automation, financial state handling, and admin tooling.',
+      'A working simulation engine with over 100 commits of systematic, phase-tracked iteration.',
+      'AI-vs-AI simulation reporting used as a real balance-testing tool.',
+      'A genuinely deep, well-iterated game-AI system rather than a surface-level demo.',
     ],
-    tags: ['ai', 'platform', 'fintech'],
-  },
-  {
-    name: 'CraftMy.World',
-    label: 'Distributed worker orchestration',
-    year: '2025',
-    summary:
-      'A distributed execution platform for planning, coordinating, and monitoring many workers across long-running automation workflows.',
-    problem:
-      'Once many agents or workers must coordinate over long tasks, simple queue processing stops being enough. The system needs ownership, heartbeats, recovery, and progress visibility.',
-    architecture: [
-      'Planning services broke requested work into executable tasks with dependency-aware scheduling.',
-      'Worker coordinators handled assignment, heartbeats, stale-worker detection, and recovery flows.',
-      'Operational dashboards surfaced execution state, throughput, and failure context for live control.',
-    ],
-    diagram: ['Planner', 'Task Queue', 'Worker Mesh', 'State Store', 'Ops Dashboard'],
-    technologies: ['Node.js', 'Redis', 'WebSockets', 'Worker Orchestration', 'Telemetry'],
-    challenges: [
-      'Recovering cleanly from stale workers and partially completed work.',
-      'Making long-running distributed execution observable to operators.',
-      'Keeping orchestration logic flexible as task complexity grew.',
-    ],
-    outcomes: [
-      'Produced a clearer model for ownership, recovery, and large-scale worker coordination.',
-      'Strengthened distributed-systems thinking around orchestration and live operational control.',
-    ],
-    tags: ['realtime', 'platform', 'systems'],
-  },
-  {
-    name: 'The Dilemma Protocol',
-    label: 'Realtime multiplayer systems',
-    year: '2024',
-    summary:
-      'A multiplayer architecture study focused on synchronized sessions, authoritative validation, reconnect handling, and fair realtime state transitions.',
-    problem:
-      'Realtime multiplayer products become fragile when timing, reconnects, and state validation are treated as afterthoughts. This project focused on trust and fairness under gameplay pressure.',
-    architecture: [
-      'An authoritative game server owned timing, validation, and synchronized state transitions.',
-      'Session-recovery flows handled reconnects, replay generation, and user continuity during interruptions.',
-      'Automated tests verified gameplay rules, edge cases, timing logic, and state integrity.',
-    ],
-    diagram: ['Clients', 'Authoritative Server', 'Session Recovery', 'Replay Pipeline', 'Leaderboard'],
-    technologies: ['Node.js', 'Socket.IO', 'Redis', 'Testing', 'Realtime State'],
-    challenges: [
-      'Keeping multiplayer state fair and deterministic under reconnects and timing pressure.',
-      'Building enough test coverage for user-visible synchronization rules.',
-      'Balancing responsiveness with authoritative backend control.',
-    ],
-    outcomes: [
-      'Improved judgment around realtime authority models, recovery flows, and fairness-oriented systems.',
-      'Created a stronger architecture pattern for multiplayer reliability and session continuity.',
-    ],
-    tags: ['realtime', 'systems'],
-  },
-];
-
-export const buildingEntries: BuildEntry[] = [
-  {
-    title: 'Loxel',
-    event: 'EthOxford 2024',
-    window: 'Hackathon delivery',
-    angle: 'Built as infrastructure under time pressure, with clear ownership of backend architecture and system composition.',
-    evidence: [
-      'Main track winner plus sponsor prizes.',
-      'Worked across coordination logic, architecture decisions, and a concise delivery window.',
-      'Strong signal for shipping complex ideas quickly.',
-    ],
-  },
-  {
-    title: 'Haithe',
-    event: 'Metis HyperHack 2024',
-    window: 'Rapid MVP cycle',
-    angle: 'Combined marketplace logic with AI-assisted workflows while still treating system behavior seriously.',
-    evidence: [
-      'Winner in a competitive environment.',
-      'Balanced prototyping speed with architecture clarity.',
-      'Demonstrated product judgment rather than feature accumulation.',
-    ],
-  },
-  {
-    title: 'Nest',
-    event: 'Avalanche Frontier Hackathon 2024',
-    window: 'Short-form build sprint',
-    angle: 'Focused on coordination systems and workflow automation instead of shallow presentation polish.',
-    evidence: [
-      'Winner-level execution under tight constraints.',
-      'Technical ownership across system definition and delivery.',
-      'Strong example of building under ambiguity.',
-    ],
-  },
-  {
-    title: 'More build proof',
-    event: 'HackaTRON · Chainlink · EduChain · Fraxtal',
-    window: 'Repeated shipping cycles',
-    angle: 'A pattern of entering complex technical environments, learning fast, and still shipping working systems.',
-    evidence: [
-      'Breadth across AI, coordination, fintech, and web3 environments.',
-      'Repeated evidence of speed, adaptability, and follow-through.',
-      'Shows execution stamina, not just isolated wins.',
-    ],
+    tags: ['featured', 'ai', 'systems'],
   },
 ];
 
@@ -545,10 +403,10 @@ export const thinkingEntries: ThinkingEntry[] = [
       'Resilience work matters most when it improves operator calm and user trust. Retries, idempotency, and observability are not infrastructure theater; they shape the product experience.',
   },
   {
-    title: 'AI systems need operating models, not just prompts',
-    kind: 'Applied AI',
+    title: 'Documentation should admit what isn’t finished',
+    kind: 'Practice',
     excerpt:
-      'Useful AI products depend on ingestion, evaluation, traceability, and fallback behavior. Model output is only one small part of the system.',
+      'A README that lists known gaps alongside what works is more useful — and more credible — than one that implies everything is done.',
   },
   {
     title: 'Developer tooling changes team speed structurally',
@@ -559,21 +417,12 @@ export const thinkingEntries: ThinkingEntry[] = [
 ];
 
 export const stackFootprint = [
-  'Node.js / TypeScript',
-  'FastAPI / Python',
-  'PostgreSQL / Redis / SQLite',
-  'WebSockets / SSE / GraphQL',
-  'AWS / Azure / Docker / CI/CD',
-  'RAG / Embeddings / Vector Retrieval / Agents',
+  'Node.js / TypeScript / Bun',
+  'PostgreSQL / MongoDB / Redis',
+  'Fastify / Express / Next.js',
+  'React / Vite / Tailwind CSS',
+  'C / C++ (systems-level work)',
+  'Docker / CI deployment workflows',
 ];
 
-export const devModeSamples = [
-  'help',
-  'projects',
-  'project cinder',
-  'project atlas',
-  'experience',
-  'stack',
-  'thinking',
-  'contact',
-];
+export const devModeSamples = ['help', 'projects', 'project cinder', 'project rotor', 'experience', 'stack', 'thinking', 'contact'];

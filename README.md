@@ -14,7 +14,7 @@ npm install
 npm run dev
 ```
 
-> **Known limitation:** `package.json` currently depends on two local tarball packages (`@cinder/shared` and `cinder`) resolved via `file:` paths that point at a sibling `AI/Cinder` project (e.g. `file:../../AI/Cinder/packages/shared/cinder-shared-0.1.0.tgz`). That project is not part of this repo and isn't published anywhere, so a fresh clone of this repo alone will **not** `npm install` successfully unless you also have `AI/Cinder` checked out at the exact relative path expected. See `PLAN.md` for details.
+A fresh clone builds standalone — there are no out-of-repo dependencies.
 
 ## Production build
 ```bash

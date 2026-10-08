@@ -1,65 +1,64 @@
 # Project Improvement Plan
 
 ## Current State
-React + TypeScript + Vite + Tailwind single-page portfolio site. 17 commits on `main`, deployed via a GitHub Actions workflow to GitHub Pages. README.md documents setup, Pages deployment, and main file locations. Repo is public.
+React + TypeScript + Vite + Tailwind single-page portfolio site. Deployed via a GitHub Actions workflow to GitHub Pages. Content/presentation split: `src/data/journal.ts` (data) and `src/App.tsx` (presentation). Repo is public.
 
 ## What Is Already Good
-- README is concise, accurate, and covers local dev, production build, and GitHub Pages setup steps.
-- GitHub Actions workflow for Pages deploy is already included (`.github/workflows/deploy.yml`).
 - Clear content/data separation (`src/data/journal.ts`) from presentation (`src/App.tsx`, `src/index.css`).
-- Commit history shows an incremental, phase-based build process (phase 1–10 commits), which is good narrative/engineering signal for a portfolio repo.
+- A real, functional Dev Mode terminal that queries the same structured data as the UI, not a decorative gimmick.
+- Distinct editorial visual identity (warm paper palette, serif headings) rather than a generic template.
+- GitHub Actions workflow for Pages deploy already included.
 
-## Issues Found
-- **Broken fresh-clone install (P0, see below).**
-- Working tree has several modified tracked files (`package-lock.json`, `package.json`, `src/App.tsx`, `src/data/journal.ts`, `src/index.css`) and an untracked `docs/cinder-red-hat-review.md` — pre-existing in-progress work, left untouched by this documentation pass.
+## Issues Found (resolved this pass)
+- **P0 dependency issue — resolved.** The working tree had an uncommitted change adding `@cinder/shared` and `cinder` as local `file:` tarball dependencies. The committed `package.json` on `main` never actually had these — they were stray uncommitted lines from a local experiment, and no source file in this repo ever imports either package. Discarded the uncommitted change and verified a clean `rm -rf node_modules && npm install && npm run build` succeeds standalone.
+- **Unverifiable/overclaimed project content — resolved.** Several featured case studies (Beacon, Atlas, Noble, Pantha, Hectare, CreditKuber, The Dilemma Protocol) described work that doesn't match the state of the underlying local repositories (e.g. "Beacon" described a built collaborative DAW; the actual `BeaconDAW` repo is an unmodified upstream Ardour import with zero original code). Replaced the featured project list with seven case studies that are verified against the actual repositories: Cinder, ROTOR, Campfire, FloppyRogue, website-auditor, EmailTracker, The Last Incentive.
+- **Unverifiable hackathon claims — resolved.** The "Hackathons & Building" chapter listed specific wins/placements (EthOxford, Metis HyperHack, Avalanche Frontier, HackaTRON, etc.). A web check found no public record of several of these, and one date didn't match public results. Removed the chapter rather than publish unverifiable claims; it can come back if backed by links to official results pages.
+- **No visibility labeling — resolved.** None of the seven featured projects are public GitHub repos today. Each case study now carries an explicit `visibilityLabel` ("Private Startup Project" for Cinder, "Private" for the rest) and only renders a GitHub/demo link when one is actually set and verified — none are set right now, since none of the seven are public.
 
 ## Documentation
-README was already good; added one small, surgical "Known limitation" note under Local development pointing at the `file:` tarball dependency issue (see P0) rather than rewriting the file.
+README's local-dev note was stale (referenced the already-resolved dependency issue) — removed.
 
 ## Code Quality
-N/A — not reviewed as part of this documentation-only pass.
+No other issues found in `App.tsx`/`journal.ts` beyond the content accuracy problems above.
 
 ## Testing
-No automated test suite currently present in this repo.
+No automated test suite. For a single-page marketing/portfolio site this is a reasonable P2, not a blocker.
 
 ## Security
-No secrets observed in README, package.json dependency names, or commit history reviewed. Nothing flagged.
+Scanned for API keys, tokens, localhost URLs, and private repo references — none found.
 
 ## Architecture
-Standard Vite + React + TS app. The one architectural wrinkle is the out-of-repo dependency described below — a packaging/vendoring decision, not a code-structure issue.
+Standard Vite + React + TS app, now genuinely dependency-clean (previous "architectural wrinkle" is gone, not just documented around).
 
 ## UX / UI
-N/A for this pass (not reviewed).
+Removed the unverifiable hackathons chapter rather than leaving a placeholder; chapter numbering and the "Four chapters" hero label updated to match.
 
 ## Performance
-N/A for this pass (not reviewed).
+Production bundle is small (~180KB JS / ~20KB CSS before gzip) with no images and no external font loading — nothing to optimize here right now.
 
 ## DevOps / Deployment
-GitHub Pages deploy workflow already exists and is documented in README. No changes needed here.
+GitHub Pages deploy workflow unchanged, already documented in README.
 
 ## GitHub / Open Source Presentation
-Public repo, used as a live personal portfolio — the broken-install issue below is the main risk to a recruiter or visitor who clones and tries to build it.
+Public repo. SEO metadata improved this pass: added `robots`, canonical URL, Open Graph, and Twitter card tags (using the real deployed URL and the existing favicon — no fabricated social-preview image).
 
 ## Screenshots / Visual Assets
-N/A — not assessed in this pass.
-
-## README
-Already solid at 34 lines; left mostly intact, with one new "Known limitation" callout added under the Local development section (see root README.md).
+None exist. The site is text/CSS-driven with no `<img>` usage, so there's nothing broken, but a project-specific screenshot or short demo clip (especially for FloppyRogue, which is visual/playable) would strengthen the case studies. Not added here — no such asset exists yet to add honestly.
 
 ## Priority Roadmap
 
 ### P0 — Critical
-- `package.json` depends on local, unpublished path dependencies (`@cinder/shared`, `cinder`) via `file:../../AI/Cinder/packages/...` tarballs. A fresh clone of this public repo cannot `npm install` without also having the sibling `AI/Cinder` project checked out at that exact relative path. This will break builds for anyone (including recruiters) who clones this repo standalone. Not fixed as part of this documentation pass — this is an architecture/packaging decision for Harry (e.g. vendor the dependency, publish it, or inline the needed code) rather than a docs fix.
+None remaining.
 
 ### P1 — Important
-- Decide and implement a resolution for the P0 dependency issue (vendor the package into this repo, publish it to a registry, or remove/inline the functionality it provides) so the public repo is self-contained.
-- Once resolved, verify a true fresh-clone `npm install && npm run build` succeeds in a clean environment (e.g. CI or a scratch directory) before relying on the README note alone.
+- If any of the seven featured private repos (ROTOR, Campfire, FloppyRogue, website-auditor, EmailTracker, The Last Incentive) are made public later, add the real `githubUrl` to that project's entry in `journal.ts` so the "View source" link appears automatically — it is already wired up, just unpopulated.
+- If verifiable hackathon results (official results page or Devpost project link) become available, the "Hackathons & Building" chapter can be reinstated with those links cited directly.
 
 ### P2 — Nice to Have
-- Add a minimal CI check (lint/build) on push/PR to catch install breakage automatically going forward.
-- Consider a short CONTRIBUTING or "why this exists" note if the repo is meant to double as a portfolio showcase beyond the README's current scope.
+- Add a demo screenshot/GIF for FloppyRogue once a build is available to capture.
+- Add a minimal CI check (typecheck + build) on push/PR.
 
 ## Recommended Next Steps
-1. Resolve the `@cinder/shared` / `cinder` tarball dependency (vendor, publish, or inline) — this is the only blocking issue.
-2. Validate a clean clone installs and builds successfully.
-3. Optionally add a basic CI workflow to guard against this class of regression in the future.
+1. Decide which (if any) of the seven featured private repos should go public, and add verified GitHub links once they do.
+2. If hackathon results can be verified with links, reinstate that chapter with citations.
+3. Optionally add a build/typecheck CI workflow.

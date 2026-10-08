@@ -11,7 +11,6 @@ import {
 import {
   aboutNarrative,
   aboutPillars,
-  buildingEntries,
   chapterLinks,
   chapterMetrics,
   devModeSamples,
@@ -52,7 +51,7 @@ type CommandResolution =
 
 const COMMAND_HISTORY_STORAGE_KEY = 'portfolio.dev-mode.command-history';
 const MAX_COMMAND_HISTORY = 50;
-const MAX_VISIBLE_PROJECTS = 6;
+const MAX_VISIBLE_PROJECTS = 7;
 const DEFAULT_PROJECT_TAGS: ProjectTagId[] = ['featured'];
 
 const terminalCommandCatalog: TerminalCommandDefinition[] = [
@@ -63,7 +62,6 @@ const terminalCommandCatalog: TerminalCommandDefinition[] = [
   { command: 'experience', description: 'Inspect the experience timeline.' },
   { command: 'stack', description: 'See the current working stack.' },
   { command: 'thinking', description: 'Open principles, notes, and engineering ideas.' },
-  { command: 'building', description: 'Review hackathon and rapid-build work.' },
   { command: 'contact', description: 'Show contact links and location.' },
   { command: 'history', description: 'Print the locally saved command history.' },
   { command: 'clear', description: 'Clear the terminal output.' },
@@ -169,7 +167,7 @@ function createInitialTerminalEntries(): TerminalEntry[] {
       prompt: 'init',
       result: [
         'Dev indexes the portfolio like a systems console.',
-        'Ask about projects, experience, architecture, stack, thinking, building, or contact.',
+        'Ask about projects, experience, architecture, stack, thinking, or contact.',
         'Keyboard: Tab autocomplete · ↑ ↓ history · Esc return to UI.',
         `Try: ${devModeSamples.join(' · ')}`,
       ].join('\n'),
@@ -198,7 +196,6 @@ function resolveDevCommand(rawCommand: string, commandHistory: string[] = []): C
         'experience',
         'stack',
         'thinking',
-        'building',
         'contact',
         'history',
         'clear',
@@ -267,15 +264,6 @@ function resolveDevCommand(rawCommand: string, commandHistory: string[] = []): C
       type: 'append',
       result: thinkingEntries
         .map((entry) => `${entry.title} · ${entry.kind}\n${entry.excerpt}`)
-        .join('\n\n'),
-    };
-  }
-
-  if (normalized === 'building' || normalized === 'hackathons') {
-    return {
-      type: 'append',
-      result: buildingEntries
-        .map((entry) => `${entry.title} · ${entry.event}\n${entry.angle}\n${formatList(entry.evidence)}`)
         .join('\n\n'),
     };
   }
@@ -631,7 +619,7 @@ function App() {
             <div className="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-[0.74rem] uppercase tracking-[0.22em] text-[rgba(102,54,53,0.58)]">
               <span>{journalProfile.location}</span>
               <span>Backend / Systems</span>
-              <span>Five chapters</span>
+              <span>Four chapters</span>
             </div>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-2 md:hidden">
@@ -796,6 +784,7 @@ function App() {
                     <p className="text-lg leading-8 text-[rgba(102,54,53,0.84)]">{project.summary}</p>
 
                     <div className="tag-row">
+                      <span className="tag-chip visibility-chip">{project.visibilityLabel}</span>
                       {project.tags
                         .map((tagId) => projectTags.find((tag) => tag.id === tagId))
                         .filter((tag): tag is (typeof projectTags)[number] => Boolean(tag))
@@ -805,6 +794,21 @@ function App() {
                           </span>
                         ))}
                     </div>
+
+                    {project.githubUrl || project.demoUrl ? (
+                      <div className="tag-row">
+                        {project.githubUrl ? (
+                          <a href={project.githubUrl} target="_blank" rel="noreferrer" className="journal-nav-link">
+                            View source
+                          </a>
+                        ) : null}
+                        {project.demoUrl ? (
+                          <a href={project.demoUrl} target="_blank" rel="noreferrer" className="journal-nav-link">
+                            Live demo
+                          </a>
+                        ) : null}
+                      </div>
+                    ) : null}
 
                     <div className="project-grid">
                       <div className="space-y-7">
@@ -890,65 +894,8 @@ function App() {
         </div>
 
         <ChapterPreview
-          id="building"
-          number="04"
-          title="Hackathons & Building"
-          lead="Evidence of execution under constraint: defining systems quickly, owning technical scope, and still shipping something coherent."
-        >
-          <div className="grid gap-10 xl:grid-cols-[0.85fr_1.15fr]">
-            <div className="space-y-5">
-              <p>
-                These environments are useful because they compress decision-making. They make it obvious whether an engineer
-                can define a system, pick the right constraints, divide work, and still deliver in time.
-              </p>
-              <p>
-                The value here is not the headline. It is the repeatability: multiple builds, different technical contexts, and
-                consistent evidence of speed, ownership, and architectural clarity.
-              </p>
-
-              <section className="paper-panel p-6">
-                <p className="detail-label">What this chapter signals</p>
-                <ul className="technical-list mt-4">
-                  <li>
-                    <span>Ability to scope complex ideas into deliverable systems fast.</span>
-                  </li>
-                  <li>
-                    <span>Comfort taking technical ownership when requirements are still moving.</span>
-                  </li>
-                  <li>
-                    <span>Proof that speed does not need to come at the cost of system thinking.</span>
-                  </li>
-                </ul>
-              </section>
-            </div>
-
-            <div className="building-grid">
-              {buildingEntries.map((entry) => (
-                <article key={entry.title} className="paper-panel p-6">
-                  <p className="detail-label">{entry.event}</p>
-                  <h3 className="mt-3 font-[var(--journal-serif)] text-3xl text-[var(--journal-ink)]">{entry.title}</h3>
-                  <p className="mt-2 text-sm uppercase tracking-[0.18em] text-[rgba(102,54,53,0.58)]">{entry.window}</p>
-                  <p className="mt-5 text-[rgba(102,54,53,0.82)]">{entry.angle}</p>
-                  <ul className="technical-list mt-5">
-                    {entry.evidence.map((item) => (
-                      <li key={item}>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
-            </div>
-          </div>
-        </ChapterPreview>
-
-        <div className="journal-shell py-3">
-          <div className="journal-rule" />
-        </div>
-
-        <ChapterPreview
           id="thinking"
-          number="05"
+          number="04"
           title="Thinking"
           lead="Ideas, engineering principles, architecture notes, and the quieter observations that shape how systems are built."
         >
