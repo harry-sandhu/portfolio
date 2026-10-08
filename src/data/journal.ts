@@ -57,6 +57,8 @@ export type ProjectCaseStudy = {
   visibilityLabel: string;
   githubUrl?: string;
   demoUrl?: string;
+  imageUrl?: string;
+  imageAlt?: string;
 };
 
 export type ThinkingEntry = {
@@ -212,6 +214,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'Private startup work — presented here as a case study, not as open-source; source and internal architecture are not public.',
     ],
     tags: ['featured', 'ai', 'platform', 'systems'],
+    demoUrl: 'https://www.usecinder.dev/',
   },
   {
     name: 'ROTOR',
@@ -278,7 +281,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
     visibility: 'private',
     visibilityLabel: 'Private',
     summary:
-      'A 2D roguelite built for a size-constrained game-dev contest — the entire game, engine, and assets must fit inside 1,474,560 bytes, the capacity of a 1.44MB floppy disk.',
+      'A 2D roguelite built for 2P Game Arcade’s 1.44MB Game Development Contest — the entire game, engine, and assets must fit inside 1,474,560 bytes, the capacity of a 1.44MB floppy disk. Submitted September 2026.',
     problem:
       'Modern game development assumes megabytes of runtime and asset budget are free. This project inverts that: no engine, no external libraries, software-rendered graphics, and procedurally generated content instead of shipped assets.',
     architecture: [
@@ -299,6 +302,8 @@ export const selectedProjects: ProjectCaseStudy[] = [
       'A README that documents the exact constraint and the reasoning behind it, rather than hiding the trade-offs.',
     ],
     tags: ['featured', 'systems'],
+    imageUrl: `${import.meta.env.BASE_URL}floppyrogue-title.png`,
+    imageAlt: 'FloppyRogue title card',
   },
   {
     name: 'website-auditor',

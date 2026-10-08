@@ -422,6 +422,14 @@
     gap: 1.25rem;
   }
 
+  .project-image {
+    width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    border: 1px solid var(--journal-border);
+    display: block;
+  }
+
   .project-diagram {
     display: grid;
     gap: 0.85rem;

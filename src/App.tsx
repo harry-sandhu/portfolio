@@ -830,6 +830,14 @@ function App() {
                       </div>
 
                       <aside className="paper-panel paper-panel-strong p-6">
+                        {project.imageUrl ? (
+                          <img
+                            src={project.imageUrl}
+                            alt={project.imageAlt ?? `${project.name} screenshot`}
+                            loading="lazy"
+                            className="project-image mb-5"
+                          />
+                        ) : null}
                         <p className="detail-label">Architecture sketch</p>
                         <div className="project-diagram mt-5">
                           {project.diagram.map((node) => (
