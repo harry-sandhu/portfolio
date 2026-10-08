@@ -834,7 +834,10 @@ function App() {
                           <img
                             src={project.imageUrl}
                             alt={project.imageAlt ?? `${project.name} screenshot`}
+                            width={project.imageWidth}
+                            height={project.imageHeight}
                             loading="lazy"
+                            decoding="async"
                             className="project-image mb-5"
                           />
                         ) : null}

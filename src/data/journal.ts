@@ -59,6 +59,8 @@ export type ProjectCaseStudy = {
   demoUrl?: string;
   imageUrl?: string;
   imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
 };
 
 export type ThinkingEntry = {
@@ -304,6 +306,8 @@ export const selectedProjects: ProjectCaseStudy[] = [
     tags: ['featured', 'systems'],
     imageUrl: `${import.meta.env.BASE_URL}floppyrogue-title.png`,
     imageAlt: 'FloppyRogue title card',
+    imageWidth: 148,
+    imageHeight: 74,
   },
   {
     name: 'website-auditor',
