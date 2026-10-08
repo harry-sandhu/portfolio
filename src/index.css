@@ -151,6 +151,7 @@
 
   .journal-chapter {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 2rem;
     padding-block: 5rem;
     scroll-margin-top: 6.75rem;
@@ -378,6 +379,7 @@
 
   .project-case {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.75rem;
     padding-block: 2.8rem;
     border-top: 1px solid var(--journal-line);
@@ -387,6 +389,7 @@
     display: grid;
     gap: 0.65rem;
     align-content: start;
+    min-width: 0;
   }
 
   .project-name {
@@ -394,6 +397,9 @@
     font-size: clamp(2rem, 3vw, 3.25rem);
     line-height: 1;
     letter-spacing: -0.03em;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
   }
 
   .project-grid {
@@ -628,8 +634,8 @@
   }
 }
 
-@media (min-width: 900px) {
-  @layer components {
+@layer components {
+  @media (min-width: 900px) {
     .journal-chapter {
       grid-template-columns: 160px minmax(0, 1fr);
       gap: 2.25rem;

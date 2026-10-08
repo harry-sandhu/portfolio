@@ -90,14 +90,14 @@ export const journalProfile: JournalProfile = {
 
 export const aboutNarrative = [
   'Harry Sandhu builds backend systems, full-stack products, and developer tooling.',
-  'Most of the work lives where reliability and speed collide — services that stay calm under load, stay legible to whoever reads them next, and hold up once they hit production.',
+  'Most of the work lives where reliability and speed collide: services that stay calm under load, stay legible to whoever reads them next, and hold up once they hit production.',
   'The common thread across startups, enterprise work, and personal projects isn’t a tech stack. It’s that the architecture is explainable, and the docs don’t pretend something works when it doesn’t.',
 ];
 
 export const aboutPillars: AboutPillar[] = [
   {
     title: 'Backend Systems',
-    body: 'Service boundaries, typed APIs, queues, storage — the unglamorous stuff that has to be correct.',
+    body: 'Service boundaries, typed APIs, queues, storage. The unglamorous stuff that has to be correct.',
   },
   {
     title: 'Full-Stack Delivery',
@@ -105,11 +105,11 @@ export const aboutPillars: AboutPillar[] = [
   },
   {
     title: 'Developer Tooling',
-    body: 'Internal tools and CLIs built to cut friction for whoever uses them next — usually that’s future me.',
+    body: 'Internal tools and CLIs built to cut friction for whoever uses them next, usually that’s future me.',
   },
   {
     title: 'Systems Thinking',
-    body: 'A size budget, a permission model, a compatibility rule — treating the constraint itself as the design problem.',
+    body: 'A size budget, a permission model, a compatibility rule: treating the constraint itself as the design problem.',
   },
 ];
 
@@ -183,7 +183,7 @@ export const projectTags: ProjectTag[] = [
   {
     id: 'systems',
     label: 'Systems',
-    description: 'Projects where the constraint — size, performance, correctness — is the actual design problem.',
+    description: 'Projects where the constraint (size, performance, correctness) is the actual design problem.',
   },
 ];
 
@@ -195,7 +195,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
     visibility: 'private-startup',
     visibilityLabel: 'Private Startup Project',
     summary:
-      'A browser-first runtime that turns tagged UI into something a voice or text command can act on — it builds a graph of the app, resolves intent locally against that graph, and only reaches for an AI fallback when it has to.',
+      'A browser-first runtime that turns tagged UI into something a voice or text command can act on. It builds a graph of the app, resolves intent locally against that graph, and only reaches for an AI fallback when it has to.',
     problem:
       'Commands like “open reports” or “filter by district” usually mean stitching together speech recognition, intent parsing, context handling, dispatch, and an AI fallback as separate systems. Cinder folds all of that into one local-first runtime instead.',
     architecture: [
@@ -213,7 +213,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
     outcomes: [
       'A working monorepo: browser SDK, a shared contracts package, an inference fallback server, and a docs site that runs on its own runtime.',
       'An internal validation suite that actually exercises scanning, graph construction, dispatch, and the fallback paths.',
-      'Still private startup work. This is the case-study version — source and internal architecture stay off the public record.',
+      'Still private startup work. This is the case-study version; source and internal architecture stay off the public record.',
     ],
     tags: ['featured', 'ai', 'platform', 'systems'],
     demoUrl: 'https://www.usecinder.dev/',
@@ -242,7 +242,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
     ],
     outcomes: [
       'A compatibility engine that actually runs, with seed data and demo accounts documented for anyone trying it.',
-      'A docs/ folder that holds up — principles, stack, an index — instead of knowledge that only lives in my head.',
+      'A docs/ folder that holds up (principles, stack, an index) instead of knowledge that only lives in my head.',
       'One typed contracts package that the backend and frontend both build against.',
     ],
     tags: ['featured', 'platform', 'systems'],
@@ -254,7 +254,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
     visibility: 'private',
     visibilityLabel: 'Private',
     summary:
-      'An internal, Jira-shaped ticketing system — groups, tickets, subtasks, boards, an audit log — built around permissions that are actually granular instead of a single admin/user switch.',
+      'An internal, Jira-shaped ticketing system (groups, tickets, subtasks, boards, an audit log) built around permissions that are actually granular instead of a single admin/user switch.',
     problem:
       'Most internal tools skip access control or bolt on exactly one permission level. Campfire needed per-group, per-role rules that could be reasoned about, and tested, not just trusted.',
     architecture: [
@@ -271,7 +271,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
     ],
     outcomes: [
       'A working ticket system backed by both integration and end-to-end test coverage.',
-      'A documented “not yet” list — email, attachments, 2FA — instead of a README that implies it’s all done.',
+      'A documented “not yet” list (email, attachments, 2FA) instead of a README that implies it’s all done.',
       'A permission model that’s actually testable, not just an admin flag.',
     ],
     tags: ['featured', 'platform'],
@@ -283,7 +283,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
     visibility: 'private',
     visibilityLabel: 'Private',
     summary:
-      'A 2D roguelite built for 2P Game Arcade’s 1.44MB Game Development Contest — the whole game, engine included, has to fit in 1,474,560 bytes, the size of an actual floppy disk. Submitted September 2026.',
+      'A 2D roguelite built for 2P Game Arcade’s 1.44MB Game Development Contest. The whole game, engine included, has to fit in 1,474,560 bytes, the size of an actual floppy disk. Submitted September 2026.',
     problem:
       'Game dev today assumes a budget of megabytes you don’t have to think about. This project removes that assumption entirely: no engine, no external libraries, a software-rendered framebuffer, content generated procedurally instead of shipped as assets.',
     architecture: [
@@ -296,7 +296,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
     challenges: [
       'Fitting an entire game in a hard 1.44MB cap with nothing off-the-shelf to lean on.',
       'Generating audio and content in code instead of paying for it in bytes as binary assets.',
-      'Still shipping real features — audio, a renderer, a pause screen — while the build sits at a fraction of the budget.',
+      'Still shipping real features (audio, a renderer, a pause screen) while the build sits at a fraction of the budget.',
     ],
     outcomes: [
       'A playable, still-growing roguelite using a small slice of the available 1.44MB.',
@@ -316,7 +316,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
     visibility: 'private',
     visibilityLabel: 'Private',
     summary:
-      'A CLI that opens a real browser on a site and runs SEO, accessibility, performance, and security checks together — CORS, header hardening, and exposure testing included — and writes it all up as a structured report.',
+      'A CLI that opens a real browser on a site and runs SEO, accessibility, performance, and security checks together (CORS, header hardening, and exposure testing included), and writes it all up as a structured report.',
     problem:
       '“Check my site” tools usually either read static HTML and miss anything client-rendered, or only check one category at a time. This one drives an actual browser and checks several categories from a single crawl.',
     architecture: [
@@ -334,7 +334,7 @@ export const selectedProjects: ProjectCaseStudy[] = [
     outcomes: [
       'A CLI with a growing set of audit modules that can each be tested on their own.',
       'A new security-hardening and exposure layer, backed by a full passing test suite.',
-      'JSON/HTML/PDF output — something you can hand to someone, not just terminal scrollback.',
+      'JSON/HTML/PDF output: something you can hand to someone, not just terminal scrollback.',
     ],
     tags: ['featured', 'systems'],
   },
@@ -374,12 +374,12 @@ export const selectedProjects: ProjectCaseStudy[] = [
     visibility: 'private',
     visibilityLabel: 'Private',
     summary:
-      'A strategy-game prototype about hidden networks and ideological manipulation, carried by an AI engine that was actually iterated — not a single scripted opponent dressed up as “AI.”',
+      'A strategy-game prototype about hidden networks and ideological manipulation, carried by an AI engine that was actually iterated, not a single scripted opponent dressed up as “AI.”',
     problem:
       'Game AI tends to be either scripted or dressed-up randomness. This one got a real scoring and lookahead system, developed across more than twenty documented phases, with AI-vs-AI runs used to tune balance.',
     architecture: [
       'A React + Vite client with an Express + TypeScript server.',
-      'A scoring engine evaluating actions across competing signals — trust, aggression, virality, ideology — instead of one win condition.',
+      'A scoring engine evaluating actions across competing signals (trust, aggression, virality, ideology) instead of one win condition.',
       'A lookahead simulator used both for AI decision-making and for AI-vs-AI balance testing, developed across a long, phase-tracked commit history.',
     ],
     diagram: ['Game State', 'Action Scorer', 'Lookahead Simulator', 'AI-vs-AI Simulation', 'Balance Tuning'],
@@ -403,13 +403,13 @@ export const thinkingEntries: ThinkingEntry[] = [
     title: 'Interfaces should reveal system intent',
     kind: 'Principle',
     excerpt:
-      'A good interface makes the hidden complexity legible — an API, a dashboard, an internal tool should show you where control actually lives and where it can break.',
+      'A good interface makes the hidden complexity legible. An API, a dashboard, an internal tool should show you where control actually lives and where it can break.',
   },
   {
     title: 'Reliability is a product feature',
     kind: 'Architecture note',
     excerpt:
-      'Retries, idempotency, observability — none of that is infrastructure theater. It’s the difference between a user trusting the product and not.',
+      'Retries, idempotency, observability: none of that is infrastructure theater. It’s the difference between a user trusting the product and not.',
   },
   {
     title: 'Documentation should admit what isn’t finished',
